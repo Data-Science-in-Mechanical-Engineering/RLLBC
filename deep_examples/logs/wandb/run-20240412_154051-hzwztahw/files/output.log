@@ -1,0 +1,16 @@
+--- Logging error ---
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/logging/__init__.py", line 1104, in emit
+    self.flush()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/logging/__init__.py", line 1084, in flush
+    self.stream.flush()
+OSError: [Errno 5] Input/output error
+Call stack:
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/threading.py", line 973, in _bootstrap
+    self._bootstrap_inner()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/ipykernel/parentpoller.py", line 38, in run
+    get_logger().warning("Parent appears to have exited, shutting down.")
+Message: 'Parent appears to have exited, shutting down.'
+Arguments: ()

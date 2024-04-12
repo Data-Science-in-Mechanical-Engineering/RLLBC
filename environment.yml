@@ -1,4 +1,4 @@
-name: rllbc
+name: rllbc-library
 channels:
   - conda-forge
   - pytorch
@@ -14,6 +14,7 @@ dependencies:
   - python-lsp-server
   - jupyterlab-git
   - screeninfo
+  - pybox2d
   - numpy
   - pandas
   - tqdm

@@ -1,0 +1,34 @@
+2024-04-12 15:41:31,532 INFO    StreamThr :80751 [internal.py:wandb_internal():86] W&B internal server running at pid: 80751, started at: 2024-04-12 15:41:31.532155
+2024-04-12 15:41:31,534 DEBUG   HandlerThread:80751 [handler.py:handle_request():146] handle_request: status
+2024-04-12 15:41:31,553 INFO    WriterThread:80751 [datastore.py:open_for_write():87] open: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240412_154131-f8qem98g/run-f8qem98g.wandb
+2024-04-12 15:41:31,554 DEBUG   SenderThread:80751 [sender.py:send():379] send: header
+2024-04-12 15:41:31,595 DEBUG   SenderThread:80751 [sender.py:send():379] send: run
+2024-04-12 15:41:32,079 INFO    SenderThread:80751 [dir_watcher.py:__init__():211] watching files in: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240412_154131-f8qem98g/files
+2024-04-12 15:41:32,079 INFO    SenderThread:80751 [sender.py:_start_run_threads():1124] run started: f8qem98g with start time 1712929291.534886
+2024-04-12 15:41:32,101 DEBUG   HandlerThread:80751 [handler.py:handle_request():146] handle_request: check_version
+2024-04-12 15:41:32,101 DEBUG   SenderThread:80751 [sender.py:send_request():406] send_request: check_version
+2024-04-12 15:41:32,331 DEBUG   HandlerThread:80751 [handler.py:handle_request():146] handle_request: run_start
+2024-04-12 15:41:32,354 DEBUG   HandlerThread:80751 [system_info.py:__init__():26] System info init
+2024-04-12 15:41:32,355 DEBUG   HandlerThread:80751 [system_info.py:__init__():41] System info init done
+2024-04-12 15:41:32,355 INFO    HandlerThread:80751 [system_monitor.py:start():194] Starting system monitor
+2024-04-12 15:41:32,356 INFO    SystemMonitor:80751 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-04-12 15:41:32,356 INFO    HandlerThread:80751 [system_monitor.py:probe():214] Collecting system info
+2024-04-12 15:41:32,359 DEBUG   HandlerThread:80751 [system_info.py:probe():150] Probing system
+2024-04-12 15:41:32,369 INFO    SystemMonitor:80751 [interfaces.py:start():190] Started cpu monitoring
+2024-04-12 15:41:32,379 INFO    SystemMonitor:80751 [interfaces.py:start():190] Started disk monitoring
+2024-04-12 15:41:32,407 INFO    SystemMonitor:80751 [interfaces.py:start():190] Started gpuapple monitoring
+2024-04-12 15:41:32,410 DEBUG   HandlerThread:80751 [system_info.py:_probe_git():135] Probing git
+2024-04-12 15:41:32,442 INFO    SystemMonitor:80751 [interfaces.py:start():190] Started memory monitoring
+2024-04-12 15:41:32,447 INFO    SystemMonitor:80751 [interfaces.py:start():190] Started network monitoring
+2024-04-12 15:41:32,556 DEBUG   HandlerThread:80751 [system_info.py:_probe_git():143] Probing git done
+2024-04-12 15:41:32,556 DEBUG   HandlerThread:80751 [system_info.py:probe():198] Probing system done
+2024-04-12 15:41:32,556 DEBUG   HandlerThread:80751 [system_monitor.py:probe():223] {'os': 'macOS-14.2.1-arm64-arm-64bit', 'python': '3.10.8', 'heartbeatAt': '2024-04-12T13:41:32.360244', 'startedAt': '2024-04-12T13:41:31.516867', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': 'td3.ipynb', 'codePathLocal': 'td3.ipynb', 'git': {'remote': 'git@github.com:Data-Science-in-Mechanical-Engineering/RLLBC.git', 'commit': '75ccef2b427de59eec27dc0ce6817965d3ac5031'}, 'email': 'lukas.kesper98@gmail.com', 'root': '/Users/kesperlukas/Projects/RLLBC', 'host': '068-120.eduroam.rwth-aachen.de', 'username': 'kesperlukas', 'executable': '/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/bin/python', 'cpu_count': 8, 'cpu_count_logical': 8, 'cpu_freq': {'current': 3204, 'min': 600, 'max': 3204}, 'cpu_freq_per_core': [{'current': 3204, 'min': 600, 'max': 3204}], 'disk': {'/': {'total': 228.27386474609375, 'used': 212.8424949645996}}, 'gpuapple': {'type': 'arm', 'vendor': 'Apple'}, 'memory': {'total': 16.0}}
+2024-04-12 15:41:32,556 INFO    HandlerThread:80751 [system_monitor.py:probe():224] Finished collecting system info
+2024-04-12 15:41:32,556 INFO    HandlerThread:80751 [system_monitor.py:probe():227] Publishing system info
+2024-04-12 15:41:32,556 DEBUG   HandlerThread:80751 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-04-12 15:41:33,083 INFO    Thread-12 :80751 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240412_154131-f8qem98g/files/conda-environment.yaml
+2024-04-12 15:41:34,338 INFO    MainThread:80751 [internal.py:handle_exit():76] Internal process exited
+2024-04-12 15:41:34,358 INFO    cpu       :80751 [interfaces.py:monitor():140] Process cpu has exited.
+2024-04-12 15:41:34,358 DEBUG   SystemMonitor:80751 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-04-12 15:41:34,358 DEBUG   SystemMonitor:80751 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-04-12 15:41:34,358 DEBUG   SystemMonitor:80751 [system_monitor.py:_start():183] Publishing last batch of metrics

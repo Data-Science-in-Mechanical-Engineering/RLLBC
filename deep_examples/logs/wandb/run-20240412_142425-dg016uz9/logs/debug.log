@@ -1,0 +1,39 @@
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Current SDK version is 0.16.5
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Configure stats pid to 56633
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/.config/wandb/settings
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/Projects/RLLBC/deep_examples/notebooks/wandb/settings
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'notebook_name': 'trpo-simple-adv.ipynb'}
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_init.py:_log_setup():527] Logging user logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/notebooks/logs/wandb/run-20240412_142425-dg016uz9/logs/debug.log
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_init.py:_log_setup():528] Logging internal logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/notebooks/logs/wandb/run-20240412_142425-dg016uz9/logs/debug-internal.log
+2024-04-12 14:24:25,166 INFO    MainThread:56633 [wandb_init.py:_jupyter_setup():473] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x14b527010>
+2024-04-12 14:24:25,167 INFO    MainThread:56633 [wandb_init.py:init():567] calling init triggers
+2024-04-12 14:24:25,167 INFO    MainThread:56633 [wandb_init.py:init():574] wandb.init called with sweep_config: {}
+config: {'exp_name': 'TRPO', 'env_id': 'CartPole-v1', 'device': 'cpu', 'random_seed': True, 'seed': 2, 'run_name': 'CartPole-v1__TRPO__2__240412_142424', 'num_envs': 4, 'enable_wandb_logging': True, 'capture_video': False, 'eval_agent': True, 'eval_count': 10, 'eval_frequency': 20, 'exp_type': None, 'num_steps': 128, 'total_timesteps': 500000, 'num_minibatches': 4, 'update_epochs': 10, 'batch_size': 512, 'minibatch_size': 128, 'learning_rate': 0.001, 'anneal_lr': False, 'gamma': 0.99, 'norm_adv': True, 'cg_max_steps': 10, 'cg_damping': 0.1, 'line_search_shrinking_factor': 0.8, 'line_search_max_iter': 10, 'target_kl': 0.01}
+2024-04-12 14:24:25,167 INFO    MainThread:56633 [wandb_init.py:init():617] starting backend
+2024-04-12 14:24:25,167 INFO    MainThread:56633 [wandb_init.py:init():621] setting up manager
+2024-04-12 14:24:25,168 INFO    MainThread:56633 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2024-04-12 14:24:25,169 INFO    MainThread:56633 [wandb_init.py:init():629] backend started and connected
+2024-04-12 14:24:25,176 INFO    MainThread:56633 [wandb_run.py:_label_probe_notebook():1299] probe notebook
+2024-04-12 14:24:25,177 INFO    MainThread:56633 [wandb_init.py:init():721] updated telemetry
+2024-04-12 14:24:25,203 INFO    MainThread:56633 [wandb_init.py:init():754] communicating run to backend with 90.0 second timeout
+2024-04-12 14:24:25,763 INFO    MainThread:56633 [wandb_run.py:_on_init():2344] communicating current version
+2024-04-12 14:24:26,973 INFO    MainThread:56633 [wandb_run.py:_on_init():2353] got version response upgrade_message: "wandb version 0.16.6 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-04-12 14:24:26,974 INFO    MainThread:56633 [wandb_init.py:init():805] starting run threads in backend
+2024-04-12 14:24:28,661 INFO    MainThread:56633 [wandb_run.py:_console_start():2323] atexit reg
+2024-04-12 14:24:28,661 INFO    MainThread:56633 [wandb_run.py:_redirect():2178] redirect: wrap_raw
+2024-04-12 14:24:28,661 INFO    MainThread:56633 [wandb_run.py:_redirect():2243] Wrapping output streams.
+2024-04-12 14:24:28,661 INFO    MainThread:56633 [wandb_run.py:_redirect():2268] Redirects installed.
+2024-04-12 14:24:28,662 INFO    MainThread:56633 [wandb_init.py:init():848] run started, returning control to user process
+2024-04-12 14:24:28,662 INFO    MainThread:56633 [wandb_run.py:_tensorboard_callback():1505] tensorboard callback: logs//CartPole-v1__TRPO__2__240412_142424/tb, True
+2024-04-12 14:43:09,107 INFO    MainThread:56633 [wandb_run.py:_finish():2052] finishing run lukas-kesper98/RLLBC_CartPole-v1/dg016uz9
+2024-04-12 14:43:09,205 INFO    MainThread:56633 [jupyter.py:save_history():445] not saving jupyter history
+2024-04-12 14:43:09,205 INFO    MainThread:56633 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 14:43:09,205 INFO    MainThread:56633 [wandb_init.py:_jupyter_teardown():455] cleaning up jupyter logic
+2024-04-12 14:43:09,205 INFO    MainThread:56633 [wandb_run.py:_atexit_cleanup():2292] got exitcode: 0
+2024-04-12 14:43:09,205 INFO    MainThread:56633 [wandb_run.py:_restore():2275] restore
+2024-04-12 14:43:09,205 INFO    MainThread:56633 [wandb_run.py:_restore():2281] restore done
+2024-04-12 14:43:21,640 INFO    MainThread:56633 [wandb_run.py:_footer_sync_info():3879] logging synced files
