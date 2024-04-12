@@ -1,0 +1,22 @@
+experiment_parameters:
+  exp_name: DDPG
+  env_id: Pendulum-v1
+  device: cpu
+  seed: 2
+  run_name: Pendulum-v1__DDPG__2__240412_134918
+  enable_wandb_logging: true
+  capture_video: true
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 20
+  exp_type:
+hyperparameters:
+  total_timesteps: 20000
+  learning_rate: 0.0003
+  gamma: 0.99
+  buffer_size: 10000
+  tau: 0.005
+  batch_size: 128
+  exploration_noise: 0.1
+  start_learning: 10000
+  policy_frequency: 2

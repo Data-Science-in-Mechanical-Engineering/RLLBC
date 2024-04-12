@@ -1,0 +1,1 @@
+Within here we can store our environments. To add an environment, register it in the __init__.py and write a file containing all the necessary functions. Make sure the package is installed.

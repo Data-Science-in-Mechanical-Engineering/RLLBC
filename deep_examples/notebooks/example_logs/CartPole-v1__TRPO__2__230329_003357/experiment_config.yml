@@ -1,0 +1,31 @@
+experiment_parameters:
+  exp_name: TRPO
+  env_id: CartPole-v1
+  device: cpu
+  random_seed: true
+  seed: 2
+  run_name: CartPole-v1__TRPO__2__230329_003357
+  num_envs: 4
+  enable_wandb_logging: true
+  capture_video: false
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 20
+  exp_type:
+hyperparameters:
+  num_steps: 128
+  total_timesteps: 500000
+  num_minibatches: 4
+  update_epochs: 10
+  batch_size: 512
+  minibatch_size: 128
+  learning_rate: 0.001
+  anneal_lr: false
+  gamma: 0.99
+  gae_lambda: 0.95
+  norm_adv: true
+  cg_max_steps: 10
+  cg_damping: 0.1
+  line_search_shrinking_factor: 0.8
+  line_search_max_iter: 10
+  target_kl: 0.01

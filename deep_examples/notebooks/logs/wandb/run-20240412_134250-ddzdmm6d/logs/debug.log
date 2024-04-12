@@ -1,0 +1,59 @@
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Current SDK version is 0.16.5
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Configure stats pid to 45622
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/.config/wandb/settings
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/Projects/RLLBC/deep_examples/notebooks/wandb/settings
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'notebook_name': 'a2c-simple-adv.ipynb'}
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:_log_setup():527] Logging user logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/notebooks/logs/wandb/run-20240412_134250-ddzdmm6d/logs/debug.log
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:_log_setup():528] Logging internal logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/notebooks/logs/wandb/run-20240412_134250-ddzdmm6d/logs/debug-internal.log
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:_jupyter_setup():473] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x1542cc1f0>
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:init():567] calling init triggers
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:init():574] wandb.init called with sweep_config: {}
+config: {'exp_name': 'A2C', 'env_id': 'CartPole-v1', 'device': 'cpu', 'seed': 1, 'run_name': 'CartPole-v1__A2C__1__240412_134249', 'enable_wandb_logging': True, 'capture_video': True, 'num_envs': 4, 'eval_agent': True, 'eval_count': 10, 'eval_frequency': 20, 'exp_type': None, 'total_timesteps': 300000, 'num_steps': 5, 'learning_rate': 0.0003, 'gamma': 0.99, 'norm_adv': True, 'ent_coef': 0.01, 'vf_coef': 0.5, 'max_grad_norm': 1, 'batch_size': 20}
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:init():617] starting backend
+2024-04-12 13:42:50,042 INFO    MainThread:45622 [wandb_init.py:init():621] setting up manager
+2024-04-12 13:42:50,043 INFO    MainThread:45622 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2024-04-12 13:42:50,044 INFO    MainThread:45622 [wandb_init.py:init():629] backend started and connected
+2024-04-12 13:42:50,050 INFO    MainThread:45622 [wandb_run.py:_label_probe_notebook():1299] probe notebook
+2024-04-12 13:42:50,051 INFO    MainThread:45622 [wandb_init.py:init():721] updated telemetry
+2024-04-12 13:42:50,076 INFO    MainThread:45622 [wandb_init.py:init():754] communicating run to backend with 90.0 second timeout
+2024-04-12 13:42:50,702 INFO    MainThread:45622 [wandb_run.py:_on_init():2344] communicating current version
+2024-04-12 13:42:50,817 INFO    MainThread:45622 [wandb_run.py:_on_init():2353] got version response upgrade_message: "wandb version 0.16.6 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-04-12 13:42:50,817 INFO    MainThread:45622 [wandb_init.py:init():805] starting run threads in backend
+2024-04-12 13:42:52,494 INFO    MainThread:45622 [wandb_run.py:_console_start():2323] atexit reg
+2024-04-12 13:42:52,494 INFO    MainThread:45622 [wandb_run.py:_redirect():2178] redirect: wrap_raw
+2024-04-12 13:42:52,494 INFO    MainThread:45622 [wandb_run.py:_redirect():2243] Wrapping output streams.
+2024-04-12 13:42:52,494 INFO    MainThread:45622 [wandb_run.py:_redirect():2268] Redirects installed.
+2024-04-12 13:42:52,495 INFO    MainThread:45622 [wandb_init.py:init():848] run started, returning control to user process
+2024-04-12 13:42:52,495 INFO    MainThread:45622 [wandb_run.py:_tensorboard_callback():1505] tensorboard callback: logs//CartPole-v1__A2C__1__240412_134249/tb, True
+2024-04-12 13:43:00,172 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:00,172 INFO    MainThread:45622 [wandb_init.py:_pause_backend():438] pausing backend
+2024-04-12 13:43:02,532 INFO    MainThread:45622 [wandb_init.py:_resume_backend():443] resuming backend
+2024-04-12 13:43:02,534 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:02,534 INFO    MainThread:45622 [wandb_init.py:_pause_backend():438] pausing backend
+2024-04-12 13:43:08,685 INFO    MainThread:45622 [wandb_init.py:_resume_backend():443] resuming backend
+2024-04-12 13:43:08,688 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:08,688 INFO    MainThread:45622 [wandb_init.py:_pause_backend():438] pausing backend
+2024-04-12 13:43:11,947 INFO    MainThread:45622 [wandb_init.py:_resume_backend():443] resuming backend
+2024-04-12 13:43:11,949 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:11,949 INFO    MainThread:45622 [wandb_init.py:_pause_backend():438] pausing backend
+2024-04-12 13:43:16,796 INFO    MainThread:45622 [wandb_init.py:_resume_backend():443] resuming backend
+2024-04-12 13:43:16,798 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:16,798 INFO    MainThread:45622 [wandb_init.py:_pause_backend():438] pausing backend
+2024-04-12 13:43:23,694 INFO    MainThread:45622 [wandb_init.py:_resume_backend():443] resuming backend
+2024-04-12 13:43:23,695 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:23,695 INFO    MainThread:45622 [wandb_init.py:_pause_backend():438] pausing backend
+2024-04-12 13:43:31,608 INFO    MainThread:45622 [wandb_init.py:_resume_backend():443] resuming backend
+2024-04-12 13:43:31,612 INFO    MainThread:45622 [wandb_run.py:_finish():2052] finishing run lukas-kesper98/RLLBC_CartPole-v1/ddzdmm6d
+2024-04-12 13:43:31,678 INFO    MainThread:45622 [jupyter.py:save_history():445] not saving jupyter history
+2024-04-12 13:43:31,678 INFO    MainThread:45622 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-12 13:43:31,678 INFO    MainThread:45622 [wandb_init.py:_jupyter_teardown():455] cleaning up jupyter logic
+2024-04-12 13:43:31,678 INFO    MainThread:45622 [wandb_run.py:_atexit_cleanup():2292] got exitcode: 0
+2024-04-12 13:43:31,678 INFO    MainThread:45622 [wandb_run.py:_restore():2275] restore
+2024-04-12 13:43:31,678 INFO    MainThread:45622 [wandb_run.py:_restore():2281] restore done
+2024-04-12 13:43:44,799 INFO    MainThread:45622 [wandb_run.py:_footer_history_summary_info():3920] rendering history
+2024-04-12 13:43:44,804 INFO    MainThread:45622 [wandb_run.py:_footer_history_summary_info():3952] rendering summary
+2024-04-12 13:43:44,812 INFO    MainThread:45622 [wandb_run.py:_footer_sync_info():3879] logging synced files

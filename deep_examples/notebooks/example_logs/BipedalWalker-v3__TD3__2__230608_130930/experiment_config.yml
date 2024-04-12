@@ -1,0 +1,24 @@
+experiment_parameters:
+  exp_name: TD3
+  env_id: BipedalWalker-v3
+  device: cpu
+  seed: 2
+  run_name: BipedalWalker-v3__TD3__2__230608_130930
+  enable_wandb_logging: true
+  capture_video: true
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 20
+  exp_type:
+hyperparameters:
+  total_timesteps: 400000
+  learning_rate: 0.0003
+  gamma: 0.99
+  buffer_size: 10000
+  tau: 0.005
+  batch_size: 512
+  exploration_noise: 0.1
+  policy_noise: 0.2
+  noise_clip: 0.5
+  start_learning: 10000
+  policy_frequency: 2

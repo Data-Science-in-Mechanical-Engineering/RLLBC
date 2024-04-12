@@ -1,0 +1,28 @@
+experiment_parameters:
+  exp_name: SAC
+  env_id: LunarLanderContinuous-v2
+  device: cpu
+  random_seed: true
+  seed: 1
+  run_name: LunarLanderContinuous-v2__SAC__1__230623_101628
+  num_envs: 1
+  enable_wandb_logging: true
+  capture_video: true
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 20
+  exp_type:
+hyperparameters:
+  total_timesteps: 200000
+  learning_starts: 10000
+  buffer_size: 10000
+  batch_size: 256
+  gamma: 0.99
+  tau: 0.01
+  exploration_noise: 0.1
+  policy_lr: 0.00073
+  q_lr: 0.001
+  policy_frequency: 2
+  target_network_frequency: 1
+  alpha: 0.2
+  autotune: true

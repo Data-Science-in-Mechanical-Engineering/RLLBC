@@ -1,0 +1,24 @@
+experiment_parameters:
+  exp_name: A2C
+  env_id: CartPole-v1
+  device: cpu
+  seed: 3
+  run_name: CartPole-v1__A2C__3__230328_075545
+  enable_wandb_logging: true
+  capture_video: true
+  num_envs: 4
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 20
+  exp_type: full_run
+hyperparameters:
+  total_timesteps: 300000
+  num_steps: 5
+  learning_rate: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  norm_adv: true
+  ent_coef: 0.01
+  vf_coef: 0.5
+  max_grad_norm: 1
+  batch_size: 20

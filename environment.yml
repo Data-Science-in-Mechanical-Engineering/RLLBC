@@ -1,0 +1,37 @@
+name: rllbc
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+  - anaconda
+dependencies:
+  - python=3.10.8
+  - ipykernel
+  - ipympl
+  - ipywidgets
+  - jupyterlab>=3.0.0,<4.0.0a0
+  - jupyterlab-lsp
+  - python-lsp-server
+  - jupyterlab-git
+  - screeninfo
+  - numpy
+  - pandas
+  - tqdm
+  - wandb
+  - seaborn
+  - matplotlib
+  - pytorch
+  - tensorboard
+  - envkernel
+  - control
+  - slycot
+  - swig
+  - pip
+  - pip:
+    - pygame
+    - stable-baselines3==1.2.0
+    - gym==0.23.1
+    - gymnasium==0.26.3
+    - jupyterlab-tensorboard-pro
+    - easydict
+    - ruamel.yaml

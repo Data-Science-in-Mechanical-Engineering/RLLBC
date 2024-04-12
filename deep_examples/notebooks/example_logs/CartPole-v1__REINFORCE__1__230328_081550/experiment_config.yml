@@ -1,0 +1,16 @@
+experiment_parameters:
+  exp_name: REINFORCE
+  env_id: CartPole-v1
+  device: cpu
+  seed: 1
+  run_name: CartPole-v1__REINFORCE__1__230328_081550
+  enable_wandb_logging: true
+  capture_video: true
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 20
+  exp_type: reinforce
+hyperparameters:
+  total_timesteps: 300000
+  learning_rate: 0.0003
+  gamma: 0.99

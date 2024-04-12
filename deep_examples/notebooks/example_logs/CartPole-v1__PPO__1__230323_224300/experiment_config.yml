@@ -1,0 +1,31 @@
+experiment_parameters:
+  exp_name: PPO
+  env_id: CartPole-v1
+  device: cpu
+  random_seed: true
+  seed: 1
+  run_name: CartPole-v1__PPO__1__230323_224300
+  num_envs: 4
+  enable_wandb_logging: true
+  capture_video: true
+  eval_agent: true
+  eval_count: 10
+  eval_frequency: 10
+hyperparameters:
+  num_steps: 128
+  total_timesteps: 500000
+  num_minibatches: 4
+  update_epochs: 4
+  batch_size: 512
+  minibatch_size: 128
+  learning_rate: 0.0025
+  anneal_lr: true
+  gamma: 0.99
+  gae_lambda: 0.95
+  norm_adv: true
+  clip_coef: 0.2
+  clip_vloss: true
+  ent_coef: 0.01
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  target_kl:
