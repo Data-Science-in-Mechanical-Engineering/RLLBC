@@ -1,1 +1,1 @@
-# RLLBC
+# RLLBC Algorithm Library
