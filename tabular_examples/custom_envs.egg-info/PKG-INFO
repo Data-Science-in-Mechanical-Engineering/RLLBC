@@ -1,6 +1,0 @@
-Metadata-Version: 2.1
-Name: custom_envs
-Version: 0.0.1
-Summary: Custom Environments for Reinforcement Learning
-Author: Bernd Frauenknecht, Emma Cramer, Ramil Sabirov, Lukas Kesper
-Requires-Dist: gymnasium

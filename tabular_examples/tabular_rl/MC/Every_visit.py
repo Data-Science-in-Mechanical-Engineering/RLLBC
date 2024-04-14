@@ -1,96 +1,49 @@
 import gymnasium as gym
 import matplotlib.pyplot as plt
+from collections import defaultdict
 import numpy as np
 import custom_envs
 
-class TD_Agent():
-    def __init__(self, env, gamma=1.0, learning_rate=0.05, epsilon=0.1, dyn_q_iters=100):
-        self.env = env
-        self.action_value_fn = np.zeros((self.env.observation_space.n, self.env.action_space.n)) # the q-fn
-        self.model = np.zeros((self.env.observation_space.n, self.env.action_space.n, 2))
-        class StateActionTracker:
-            def __init__(self):
-                self.states = {}
-                self.actions = {}
-            def add_state_action_pair(self, state, action):
-                if state not in self.states:
-                    self.states[state] = 1
-                    self.actions[state] = set([action])
-                else:
-                    self.states[state] += 1
-                    if action not in self.actions[state]:
-                        self.actions[state].add(action)
-            def get_state(self):
-                if self.states:
-                    return np.random.choice(list(self.states.keys()))
-            def get_action(self, state):
-                if state in self.actions and self.actions[state]:
-                    return np.random.choice(list(self.actions[state]))
-        self.visited_states_and_actions = StateActionTracker()
-        self.learning_rate = learning_rate
-        self.gamma = gamma
-        self.epsilon = epsilon # choose 0.0 to make a totally greedy policy, 1.0 for a fully random policy
-        self.dyn_q_iters = dyn_q_iters
 
-    def get_random_action(self):
-        random_action = np.random.choice(range(self.env.action_space.n))
-        return random_action
-    def get_best_action(self, state):
-        best_action = np.random.choice(np.flatnonzero(np.isclose(self.action_value_fn[state], self.action_value_fn[state].max(),
-                                                                 rtol=0.01)))
-        return best_action
-    def epsilon_greedy_policy(self, state):
-        # returns action, choosing a random action with probability epsilon, or the best action
-        # regarding Q with probability (1 - epsilon)
-        randomly = np.random.random() < self.epsilon
-        if randomly:
-            action = self.get_random_action()
-        else:
-            action = self.get_best_action(state)
-        return action
 
-    def train(self, num_episodes):
-        # Reset environment and pick first action
-        for i in range(num_episodes+1):
-            state, info = env.reset()  # most values are replaced in first env.step(),
-            done = False
-            while not done:
-                # Choose action and perform step
-                action = self.epsilon_greedy_policy(state)
-                next_state, reward, done, truncated, info = env.step(action)
-                # TD Update
-                best_next_action = self.get_best_action(next_state)
-                self.action_value_fn[state][action] = self.action_value_fn[state][action] + self.learning_rate * (reward + self.gamma * self.action_value_fn[next_state][best_next_action] - self.action_value_fn[state][action])
-                self.model[state][action] = np.array([next_state, reward]) # Assuming deterministic environment
-                self.visited_states_and_actions.add_state_action_pair(state, action)
-                state = next_state
-                for j in range(self.dyn_q_iters):
-                    prev_state = self.visited_states_and_actions.get_state()
-                    prev_action = self.visited_states_and_actions.get_action(prev_state)
-                    prev_next_state, prev_reward = int(self.model[prev_state][prev_action][0]), self.model[prev_state][prev_action][1]
-                    best_next_action = self.get_best_action(prev_next_state)
-                    self.action_value_fn[prev_state][prev_action] = self.action_value_fn[prev_state][prev_action] + self.learning_rate * (prev_reward + self.gamma * self.action_value_fn[prev_next_state][best_next_action] - self.action_value_fn[prev_state][prev_action])
-            if i % 20 == 0:
-                self.visualize(i)
-    
     def evaluate(self, env, num_runs=1):
         tot_reward = [0]
         for _ in range(num_runs):
             done = False
-            state, info = env.reset()
+            obs, info = env.reset()
             reward_per_run = 0
             while not done:
-                action = self.get_best_action(state)
-                state, reward, done, truncated, info = env.step(action)
+                action = self.get_best_action(obs)
+                obs, reward, done, truncated, info = env.step(action)
                 reward_per_run += reward
             tot_reward.append(reward_per_run + tot_reward[-1])
         return tot_reward
     
+    def visualize_evals(self):
+        x = np.array(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'])
+        y = np.array(['1', '2', '3', '4'])
+        # Only a part of the value function array is necessary for showing the policy. This is sliced following S&B:
+        retcounts = np.zeros((self.env.observation_space.n, 1))
+        for i in range(self.action_value_fn.shape[0]):
+            for j in range(4):
+                retcounts[i] += self.ret_count[(i, j)]
+        # Print the value function
+        retcounts = retcounts.reshape(12, 4)
+        print(retcounts)
+        fig, ax = plt.subplots(nrows=1, figsize=(12, 4), subplot_kw={'projection': '3d'})
+        X, Y = np.meshgrid(y.astype(int), x.astype(int))
+        ax.plot_wireframe(X, Y, retcounts)
+        ax.set_zlim(0, 200000)
+        ax.set_ylabel('y')
+        ax.set_xlabel('x')
+        ax.set_zlabel('retcount')
+        plt.show()
+    
     # for cliff_walking:
-    def visualize(self, epoch):
-        self.plot_action_value(epoch)
+    def visualize(self, episode):
+        self.plot_action_value(episode)
 
-    def plot_action_value(self, epoch): 
+    def plot_action_value(self, episode): 
         q_fn = np.around(self.action_value_fn, decimals=1)
         fig, ax=plt.subplots(figsize=(18,5))
         lines = 4
@@ -136,7 +89,7 @@ class TD_Agent():
         ax.triplot(xy_coordinates[:,0], xy_coordinates[:,1], triangles, 
                    **{"color":"k", "lw":1})
         tripcolor = ax.tripcolor(xy_coordinates[:,0], xy_coordinates[:,1], triangles, 
-                                 facecolors=colours, **{"cmap": "coolwarm"}, vmin=-10, vmax=0.0)
+                                 facecolors=colours, **{"cmap": "winter"}, vmin=-50, vmax=0.0)
         ax.margins(0)
         ax.set_aspect("equal")
         fig.colorbar(tripcolor)
@@ -155,7 +108,8 @@ class TD_Agent():
             plt.text(xi,yi,round(bottom.flatten()[i],2), size=textsize, color="w", 
                      ha='center', va='center')
         ax.axis('off')
-        plt.title("Q-Function, Epoch "+str(epoch))
+        plt.title("Q-Function, Episode "+str(episode))
+        # add lines for separation
         for i in range(lines+1):
             x = [0, rows]
             y = [i, i]
@@ -165,12 +119,13 @@ class TD_Agent():
             y = [0, lines]
             plt.plot(x,y, color='black')
         plt.show()
+    
+    """
+    # for frozen_lake:
+    def visualize(self, episode):
+        self.plot_action_value(episode)
 
-    """ # for frozen_lake
-    def visualize(self, epoch):
-        self.plot_action_value(epoch)
-
-    def plot_action_value(self, epoch): 
+    def plot_action_value(self, episode): 
         fig, ax=plt.subplots(figsize=(7,5))
         lines = 4
         rows = 4        
@@ -234,7 +189,8 @@ class TD_Agent():
             plt.text(xi,yi,round(bottom.flatten()[i],2), size=textsize, color="w", 
                      ha='center', va='center')
         ax.axis('off')
-        plt.title("Q-Function, Epoch "+str(epoch))
+        plt.title("Q-Function, Episode "+str(episode))
+        # add lines for separation
         for i in range(lines+1):
             x = [0, rows]
             y = [i, i]
@@ -246,32 +202,37 @@ class TD_Agent():
         plt.show()
     """
 
+########################################################################################################################
+
 if __name__ == "__main__":
 
-    """ # for frozen_lake:
+    """
     map = ["SFFH", "FFFH", "HFFH", "HFFG"]
-    env = gym.make('CustomFrozenLake-v1', render_mode=None, desc=map, is_slippery=False) # set render_mode=None for speeding up learning
+    env = gym.make('CustomFrozenLake-v1', render_mode=None, desc=map, is_slippery=False)
     env.reset()
-    agent = TD_Agent(env, gamma=0.9, learning_rate=0.1, epsilon=0.1)
+    agent = MC_Agent(env, gamma=0.9, epsilon=0.1)
 
     input("Press Enter to train the agent")
-    agent.train(num_episodes=100)
+    agent.train(num_episodes=5000)
 
     input("Press Enter to evaluate the agent")
-    env = gym.make('CustomFrozenLake-v1', render_mode='human', desc=map, is_slippery=False) # set render_mode=None for speeding up learning
-    num_runs = 5
+    num_runs = 100
+    env = gym.make('CustomFrozenLake-v1', render_mode='human', desc=map, is_slippery=False)
     agent.evaluate(env, num_runs=num_runs)
     """
 
     # for cliff_walking:
+    # Warning: There has to be a bug with the environment
     env = gym.make('CliffWalking-v1', render_mode=None)
     env.reset()
-    agent = TD_Agent(env, gamma=0.9, learning_rate=0.1, epsilon=0.3)
+    agent = MC_Agent(env, gamma=0.9, epsilon=0.3, q_tolerance=0.1)
 
     input("Press Enter to train the agent")
-    agent.train(num_episodes=100)
+    agent.train(num_episodes=10000, episode_max_duration=100)
 
     # Compare the returns
     input("Press Enter to evaluate the agent")
     env = gym.make('CliffWalking-v1', render_mode='human')
+    agent.visualize_evals()
     agent.evaluate(env, num_runs=100)
+
