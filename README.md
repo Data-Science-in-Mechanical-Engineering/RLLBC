@@ -1,4 +1,4 @@
-![DSME-logo](./deep_examples/notebooks/static/DSME_logo.png)
+![DSME-logo](./deep_examples/static/DSME_logo.png)
 
 #  Reinforcement Learning and Learning-based Control
 
