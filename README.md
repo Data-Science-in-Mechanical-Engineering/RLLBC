@@ -1,4 +1,4 @@
-![DSME-logo](./deep_examples/static/DSME_logo.png)
+![DSME-logo](./class_examples/img/DSME_logo.png)
 
 #  Reinforcement Learning and Learning-based Control
 
@@ -9,8 +9,7 @@
 </p>
 
 ---
-
-This repository serves as a comprehensive source of extra material for the class. We provide example algorithms for tabular and deep reinforcement learning in the folders "tabular_examples" and "deep_examples". All algorithms are presented via Jupyter notebooks. You can find installation instructions below. For more details on how to work with the algorithms, we refer to the descriptions in the notebooks. Furthermore, we provide examples from the lecture and exercise in the folder "tabular_examples".
+The algorithms within this library were developed in the context of the class Reinforcement Learning and Learning-based Control (RLLBC) at the Institute for Data Science in Mechanical Engineering (DSME) at RWTH Aachen University. In this class we use this library in Lectures and Exercises. Students can also use the library to expand their knowledge through self-study. We provide example algorithms for tabular and deep reinforcement learning in the folders "tabular_examples" and "deep_examples". All algorithms are presented via Jupyter notebooks. You can find installation instructions below. For more details on how to work with the algorithms, we refer to the descriptions in the notebooks. Furthermore, we provide examples from the lecture and exercise in the folder "class_examples".
 
 ## Installation guide
 
