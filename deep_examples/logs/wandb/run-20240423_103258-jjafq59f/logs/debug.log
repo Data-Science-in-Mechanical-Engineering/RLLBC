@@ -1,0 +1,94 @@
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Current SDK version is 0.16.5
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Configure stats pid to 2803
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/.config/wandb/settings
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/Projects/RLLBC/deep_examples/wandb/settings
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-04-23 10:32:58,178 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:_log_setup():527] Logging user logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103258-jjafq59f/logs/debug.log
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:_log_setup():528] Logging internal logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103258-jjafq59f/logs/debug-internal.log
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:_jupyter_setup():473] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x16329aef0>
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:init():567] calling init triggers
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:init():574] wandb.init called with sweep_config: {}
+config: {'exp_name': 'REINFORCE', 'env_id': 'CartPole-v1', 'device': 'cpu', 'seed': 2, 'run_name': 'CartPole-v1__REINFORCE__2__240423_103252', 'enable_wandb_logging': True, 'capture_video': True, 'eval_agent': True, 'eval_count': 10, 'eval_frequency': 50, 'total_timesteps': 100000, 'learning_rate': 0.0003, 'gamma': 0.99}
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:init():617] starting backend
+2024-04-23 10:32:58,179 INFO    MainThread:2803 [wandb_init.py:init():621] setting up manager
+2024-04-23 10:32:58,181 INFO    MainThread:2803 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2024-04-23 10:32:58,182 INFO    MainThread:2803 [wandb_init.py:init():629] backend started and connected
+2024-04-23 10:32:58,192 INFO    MainThread:2803 [wandb_run.py:_label_probe_notebook():1299] probe notebook
+2024-04-23 10:32:58,193 INFO    MainThread:2803 [wandb_init.py:init():721] updated telemetry
+2024-04-23 10:32:58,219 INFO    MainThread:2803 [wandb_init.py:init():754] communicating run to backend with 90.0 second timeout
+2024-04-23 10:33:57,100 INFO    Thread-5 (wrapped_target):2803 [retry.py:__call__():172] Retry attempt failed:
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 537, in _make_request
+    response = conn.getresponse()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connection.py", line 466, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/util/retry.py", line 470, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 539, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 370, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Read timed out. (read timeout=20)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 131, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/internal/internal_api.py", line 369, in execute
+    return self.client.execute(*args, **kwargs)  # type: ignore
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/lib/gql_request.py", line 58, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.wandb.ai', port=443): Read timed out. (read timeout=20)
+2024-04-23 10:34:28,676 ERROR   MainThread:2803 [wandb_init.py:init():780] encountered error: Run initialization has timed out after 90.0 sec. 
+Please refer to the documentation for additional information: https://docs.wandb.ai/guides/track/tracking-faq#initstarterror-error-communicating-with-wandb-process-
+2024-04-23 10:34:28,758 ERROR   MainThread:2803 [wandb_init.py:init():1205] Run initialization has timed out after 90.0 sec. 
+Please refer to the documentation for additional information: https://docs.wandb.ai/guides/track/tracking-faq#initstarterror-error-communicating-with-wandb-process-
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 1187, in init
+    run = wi.init()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 786, in init
+    raise error
+wandb.errors.CommError: Run initialization has timed out after 90.0 sec. 
+Please refer to the documentation for additional information: https://docs.wandb.ai/guides/track/tracking-faq#initstarterror-error-communicating-with-wandb-process-
+2024-04-23 10:34:47,473 WARNING MsgRouterThr:2803 [router.py:message_loop():77] message_loop has been closed

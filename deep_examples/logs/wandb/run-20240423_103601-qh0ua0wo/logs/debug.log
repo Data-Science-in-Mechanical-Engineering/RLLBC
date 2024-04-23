@@ -1,0 +1,32 @@
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Current SDK version is 0.16.5
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Configure stats pid to 3658
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/.config/wandb/settings
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Loading settings from /Users/kesperlukas/Projects/RLLBC/deep_examples/wandb/settings
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-23 10:36:01,037 INFO    MainThread:3658 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:_log_setup():527] Logging user logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103601-qh0ua0wo/logs/debug.log
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:_log_setup():528] Logging internal logs to /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103601-qh0ua0wo/logs/debug-internal.log
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:_jupyter_setup():473] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x15dc9ef50>
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:init():567] calling init triggers
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:init():574] wandb.init called with sweep_config: {}
+config: {'exp_name': 'REINFORCE', 'env_id': 'CartPole-v1', 'device': 'cpu', 'seed': 2, 'run_name': 'CartPole-v1__REINFORCE__2__240423_103559', 'enable_wandb_logging': True, 'capture_video': True, 'eval_agent': True, 'eval_count': 10, 'eval_frequency': 50, 'total_timesteps': 100000, 'learning_rate': 0.0003, 'gamma': 0.99}
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:init():617] starting backend
+2024-04-23 10:36:01,038 INFO    MainThread:3658 [wandb_init.py:init():621] setting up manager
+2024-04-23 10:36:01,040 INFO    MainThread:3658 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2024-04-23 10:36:01,041 INFO    MainThread:3658 [wandb_init.py:init():629] backend started and connected
+2024-04-23 10:36:01,051 INFO    MainThread:3658 [wandb_run.py:_label_probe_notebook():1299] probe notebook
+2024-04-23 10:36:01,052 INFO    MainThread:3658 [wandb_init.py:init():721] updated telemetry
+2024-04-23 10:36:01,077 INFO    MainThread:3658 [wandb_init.py:init():754] communicating run to backend with 90.0 second timeout
+2024-04-23 10:36:08,648 INFO    MainThread:3658 [wandb_run.py:_on_init():2344] communicating current version
+2024-04-23 10:36:08,724 INFO    MainThread:3658 [wandb_run.py:_on_init():2353] got version response upgrade_message: "wandb version 0.16.6 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-04-23 10:36:08,724 INFO    MainThread:3658 [wandb_init.py:init():805] starting run threads in backend
+2024-04-23 10:36:10,567 INFO    MainThread:3658 [wandb_run.py:_console_start():2323] atexit reg
+2024-04-23 10:36:10,567 INFO    MainThread:3658 [wandb_run.py:_redirect():2178] redirect: wrap_raw
+2024-04-23 10:36:10,567 INFO    MainThread:3658 [wandb_run.py:_redirect():2243] Wrapping output streams.
+2024-04-23 10:36:10,567 INFO    MainThread:3658 [wandb_run.py:_redirect():2268] Redirects installed.
+2024-04-23 10:36:10,568 INFO    MainThread:3658 [wandb_init.py:init():848] run started, returning control to user process
+2024-04-23 10:36:10,703 INFO    MainThread:3658 [jupyter.py:save_ipynb():373] not saving jupyter notebook
+2024-04-23 10:36:10,703 INFO    MainThread:3658 [wandb_init.py:_pause_backend():438] pausing backend

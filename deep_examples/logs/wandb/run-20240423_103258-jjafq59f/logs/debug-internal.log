@@ -1,0 +1,94 @@
+2024-04-23 10:32:58,183 INFO    StreamThr :2840 [internal.py:wandb_internal():86] W&B internal server running at pid: 2840, started at: 2024-04-23 10:32:58.182554
+2024-04-23 10:32:58,184 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: status
+2024-04-23 10:32:58,193 INFO    WriterThread:2840 [datastore.py:open_for_write():87] open: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103258-jjafq59f/run-jjafq59f.wandb
+2024-04-23 10:32:58,194 DEBUG   SenderThread:2840 [sender.py:send():379] send: header
+2024-04-23 10:32:58,220 DEBUG   SenderThread:2840 [sender.py:send():379] send: run
+2024-04-23 10:33:03,261 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:08,285 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:13,309 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:18,337 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:23,355 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:28,385 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:33,413 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:38,438 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:43,464 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:48,489 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:53,516 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:33:58,537 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:34:01,528 INFO    SenderThread:2840 [retry.py:__call__():172] Retry attempt failed:
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 537, in _make_request
+    response = conn.getresponse()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connection.py", line 466, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/util/retry.py", line 470, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 539, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/urllib3/connectionpool.py", line 370, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Read timed out. (read timeout=20)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 131, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/internal/internal_api.py", line 369, in execute
+    return self.client.execute(*args, **kwargs)  # type: ignore
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/wandb/sdk/lib/gql_request.py", line 58, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.wandb.ai', port=443): Read timed out. (read timeout=20)
+2024-04-23 10:34:03,561 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:34:08,586 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:34:13,606 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:34:18,633 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:34:23,654 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:34:28,676 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: cancel
+2024-04-23 10:34:28,676 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: cancel
+2024-04-23 10:34:28,676 DEBUG   SenderThread:2840 [sender.py:send():388] Record cancelled: run
+2024-04-23 10:34:28,677 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: status_report
+2024-04-23 10:34:33,691 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: status_report
+2024-04-23 10:34:38,715 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: status_report
+2024-04-23 10:34:43,740 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: status_report
+2024-04-23 10:34:46,467 DEBUG   HandlerThread:2840 [handler.py:handle_request():146] handle_request: shutdown
+2024-04-23 10:34:46,467 INFO    HandlerThread:2840 [handler.py:finish():866] shutting down handler
+2024-04-23 10:34:46,750 INFO    WriterThread:2840 [datastore.py:close():296] close: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103258-jjafq59f/run-jjafq59f.wandb
+2024-04-23 10:34:46,751 INFO    SenderThread:2840 [sender.py:finish():1546] shutting down sender

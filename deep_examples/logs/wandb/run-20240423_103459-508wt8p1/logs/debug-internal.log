@@ -1,0 +1,29 @@
+2024-04-23 10:34:59,343 INFO    StreamThr :3404 [internal.py:wandb_internal():86] W&B internal server running at pid: 3404, started at: 2024-04-23 10:34:59.343061
+2024-04-23 10:34:59,344 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: status
+2024-04-23 10:34:59,353 INFO    WriterThread:3404 [datastore.py:open_for_write():87] open: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103459-508wt8p1/run-508wt8p1.wandb
+2024-04-23 10:34:59,354 DEBUG   SenderThread:3404 [sender.py:send():379] send: header
+2024-04-23 10:34:59,384 DEBUG   SenderThread:3404 [sender.py:send():379] send: run
+2024-04-23 10:35:04,421 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:09,443 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:14,464 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:19,485 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:24,516 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:29,540 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:34,564 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:39,590 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:44,619 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:49,650 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: keepalive
+2024-04-23 10:35:52,268 DEBUG   HandlerThread:3404 [handler.py:handle_request():146] handle_request: shutdown
+2024-04-23 10:35:52,268 INFO    HandlerThread:3404 [handler.py:finish():866] shutting down handler
+2024-04-23 10:35:52,556 INFO    SenderThread:3404 [dir_watcher.py:__init__():211] watching files in: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103459-508wt8p1/files
+2024-04-23 10:35:52,556 INFO    SenderThread:3404 [sender.py:_start_run_threads():1124] run started: 508wt8p1 with start time 1713861299.343612
+2024-04-23 10:35:52,556 INFO    SenderThread:3404 [sender.py:finish():1546] shutting down sender
+2024-04-23 10:35:52,556 INFO    SenderThread:3404 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-04-23 10:35:52,600 INFO    WriterThread:3404 [datastore.py:close():296] close: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103459-508wt8p1/run-508wt8p1.wandb
+2024-04-23 10:35:53,561 INFO    SenderThread:3404 [dir_watcher.py:finish():388] scan: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103459-508wt8p1/files
+2024-04-23 10:35:53,562 INFO    SenderThread:3404 [dir_watcher.py:finish():402] scan save: /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103459-508wt8p1/files/config.yaml config.yaml
+2024-04-23 10:35:53,562 INFO    SenderThread:3404 [file_pusher.py:finish():172] shutting down file pusher
+2024-04-23 10:35:53,563 INFO    SenderThread:3404 [file_pusher.py:join():178] waiting for file pusher
+2024-04-23 10:35:56,513 INFO    wandb-upload_0:3404 [upload_job.py:push():131] Uploaded file /Users/kesperlukas/Projects/RLLBC/deep_examples/logs/wandb/run-20240423_103459-508wt8p1/files/config.yaml
+2024-04-23 10:35:57,091 INFO    SenderThread:3404 [file_stream.py:finish():614] file stream finish called
+2024-04-23 10:35:57,288 INFO    SenderThread:3404 [file_stream.py:finish():618] file stream finish is done
