@@ -25,6 +25,7 @@ dependencies:
   - tensorboard
   - envkernel
   - control
+  - scikit-learn
   - slycot
   - swig
   - pip
@@ -34,5 +35,6 @@ dependencies:
     - gym==0.23.1
     - gymnasium==0.26.3
     - jupyterlab-tensorboard-pro
+    - PyQt5
     - easydict
     - ruamel.yaml

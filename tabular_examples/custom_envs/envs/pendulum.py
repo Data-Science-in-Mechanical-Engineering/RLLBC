@@ -1,9 +1,10 @@
 import numpy as np
 import gymnasium as gym
-from gym.envs.classic_control.pendulum import PendulumEnv
-from gym.spaces import Discrete, Box
-from gym.envs.registration import register
-
+from gymnasium.envs.classic_control.pendulum import PendulumEnv
+from gymnasium.spaces import Box
+import warnings
+warnings.filterwarnings("ignore",category=DeprecationWarning)
+warnings.filterwarnings("ignore",category=UserWarning)
 
 class CustomPendulumEnv(PendulumEnv):
     def __init__(self):
@@ -11,10 +12,9 @@ class CustomPendulumEnv(PendulumEnv):
         super().reset()
         high = np.asarray([np.pi, self.max_speed])
         self.observation_space = Box(
-            low=-high,
-            high=high,
-            dtype=np.float32
-        )
+            low=np.float32(-high),
+            high=np.float32(high),
+            dtype=np.float32)
 
     def step(self, action):
         super().step([action])
@@ -24,16 +24,10 @@ class CustomPendulumEnv(PendulumEnv):
             state[0] += 2 * np.pi
         while state[0] > np.pi:
             state[0] -= 2 * np.pi
-        return state, np.squeeze(reward), False, {}
+        return np.float32(state), np.squeeze(reward), False, {}, {}
 
     def reset(self):
         state = np.array([2 * (np.random.rand() - 0.5) * np.pi, 2 * (np.random.rand() - 0.5) * self.observation_space.high[1]])
         self.state = state
-        return state
-
-
-register(
-    id='CustomPendulum-v0',
-    entry_point='CustomPendulumEnv:CustomPendulumEnv',
-    max_episode_steps=200,
-)
+        info = {}
+        return state, info

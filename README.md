@@ -44,4 +44,4 @@ To install the library, please follow the instructions below.
 
 *Note*: In order to be able to render videos of the agent's performance you have to make sure to have `ffmpeg` installed.
 
-*Warning*: pybox2d is not available for Apple Silicon devices (Mac with M1, M2, or M3 processors). When working with Apple Silicon devices, this might cause issues.
+*Warning*: pybox2d is not available for Apple Silicon devices (Mac with M1, M2, or M3 processors). When working with Apple Silicon devices, this might cause issues. For installation, remove pybox2d from the list of required packages in the `environment.yml` file.
