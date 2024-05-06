@@ -1,0 +1,48 @@
+{
+    "os": "macOS-14.4.1-arm64-arm-64bit",
+    "python": "3.10.8",
+    "heartbeatAt": "2024-05-06T14:20:08.013825",
+    "startedAt": "2024-05-06T14:20:07.280092",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "dqn.ipynb",
+    "codePathLocal": "dqn.ipynb",
+    "git": {
+        "remote": "git@github.com:Data-Science-in-Mechanical-Engineering/RLLBC.git",
+        "commit": "96aab1b403d3d31949ece7dee9c4776536954a6c"
+    },
+    "email": "lukas.kesper98@gmail.com",
+    "root": "/Users/kesperlukas/Projects/RLLBC",
+    "host": "MacBook-Air-von-Lukas.fritz.box",
+    "username": "kesperlukas",
+    "executable": "/opt/homebrew/Caskroom/miniconda/base/envs/rllbc-library/bin/python",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 3204,
+        "min": 600,
+        "max": 3204
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3204,
+            "min": 600,
+            "max": 3204
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 228.27386474609375,
+            "used": 200.75711059570312
+        }
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 16.0
+    }
+}
