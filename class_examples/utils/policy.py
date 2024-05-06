@@ -8,10 +8,7 @@ class PDPolicy:
         self.swingup = swingup
 
     def get_action(self, x):
-
         th, thdot = x
-
-
         if th < -np.pi/2 and self.swingup:
             u = [np.sign(thdot) - .1*thdot]
         elif th > np.pi/2 and self.swingup:
