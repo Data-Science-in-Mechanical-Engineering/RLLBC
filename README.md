@@ -27,7 +27,10 @@ To install the library, please follow the instructions below.
       ```
    - when using Windows, for the command to work you need to open the conda shell in the directory of the environment file.
 
-3. **Activate the environment** with `conda activate rllbc-library`
+3. **Activate the environment** with 
+   ```setup 
+   conda activate rllbc-library
+   ```
 
 3. **Install the custom environments**, that we use for out tabular examples. If conda has been used, navigate to `./tabular_examples` and run
    ```setup 
@@ -45,3 +48,16 @@ To install the library, please follow the instructions below.
 *Note*: In order to be able to render videos of the agent's performance you have to make sure to have `ffmpeg` installed.
 
 *Warning*: pybox2d is not available for Apple Silicon devices (Mac with M1, M2, or M3 processors). When working with Apple Silicon devices, this might cause issues. For installation, remove pybox2d from the list of required packages in the `environment.yml` file.
+
+### Using the library on a local computer:
+Once the environment has been successfully installed, the library can be easily accessed via the following steps:
+1. **Navigate to the project folder** and open your terminal there. On Windows, use the Anaconda Prompt.
+2. **Activate the environment** with 
+   ```setup 
+   conda activate rllbc-library
+   ```
+3. **Start up JupyterLab** from your terminal with
+   ```setup 
+   jupyter-lab
+   ```
+You are ready to browse the library.
