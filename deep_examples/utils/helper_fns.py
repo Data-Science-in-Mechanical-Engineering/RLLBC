@@ -233,7 +233,7 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         returns_over_runs: list of floats, representing the return of each run
         episode_len_over_runs: list of integers, representing the episode length of each run
     """
-    next_obs = torch.Tensor(envs.reset())
+    next_obs = torch.Tensor(envs.reset()).to("cuda" if torch.cuda.is_available() else "cpu")
     returns_over_runs = []
     episode_len_over_runs = []
     finish = False
@@ -346,7 +346,7 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False):
         with torch.no_grad():
             action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
 
-        state, _, terminated, info = env.step(action.squeeze(0).numpy())
+        state, _, terminated, info = env.step(action.squeeze(0).cpu().numpy())
 
         if terminated:
             done = True
