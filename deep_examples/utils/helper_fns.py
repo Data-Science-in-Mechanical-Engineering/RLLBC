@@ -1,6 +1,7 @@
 import os
 import warnings
 import collections
+from typing import Callable, List
 
 import numpy as np
 import pandas as pd
@@ -13,6 +14,9 @@ from easydict import EasyDict as edict
 import gym
 import wandb
 import torch
+from stable_baselines3.common.atari_wrappers import MaxAndSkipEnv, EpisodicLifeEnv, FireResetEnv, \
+    ClipRewardEnv
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=DeprecationWarning)
     from torch.utils.tensorboard import SummaryWriter
@@ -28,8 +32,39 @@ Here is a list of important helper functions (in no particular order). You may c
 4. `save_train_config_to_yaml`, `save_model` and `save_tracked_values` - at the end training
 5. `evaluate_agent` - used to evaluate agent performance during or post-training
 6. plotter functions to generate plot in the section **Compare Trained Agents and Display Behaviour**
+7. 'make_atari_env' - helps in creating a vectorized gym environment for the Breakeout Atari game
 '''
 
+
+class NoopResetEnv(gym.Wrapper):
+    """
+    Sample initial states by taking random number of no-ops on reset.
+    No-op is assumed to be action 0.
+
+    :param env: the environment to wrap
+    :param noop_max: the maximum value of no-ops to run
+    """
+
+    def __init__(self, env: gym.Env, noop_max: int = 30):
+        gym.Wrapper.__init__(self, env)
+        self.noop_max = noop_max
+        self.override_num_noops = None
+        self.noop_action = 0
+        assert env.unwrapped.get_action_meanings()[0] == "NOOP"
+
+    def reset(self, **kwargs) -> np.ndarray:
+        self.env.reset(**kwargs)
+        if self.override_num_noops is not None:
+            noops = self.override_num_noops
+        else:
+            noops = self.unwrapped.np_random.integers(1, self.noop_max + 1)
+        assert noops > 0
+        obs = np.zeros(0)
+        for _ in range(noops):
+            obs, _, done, _ = self.env.step(self.noop_action)
+            if done:
+                obs = self.env.reset(**kwargs)
+        return obs
 
 def make_single_env(env_id, seed):
     """
@@ -68,6 +103,26 @@ def make_env(env_id, seed):
         return env
     return thunk
 
+
+def make_atari_env(env_id, seed):
+    def thunk():
+        env = gym.make(env_id)
+        env = gym.wrappers.RecordEpisodeStatistics(env)
+
+        env = NoopResetEnv(env, noop_max=30)
+        env = MaxAndSkipEnv(env, skip=4)
+        env = EpisodicLifeEnv(env)
+        if "FIRE" in env.unwrapped.get_action_meanings():
+            env = FireResetEnv(env)
+        env = ClipRewardEnv(env)
+        env = gym.wrappers.ResizeObservation(env, (84, 84))
+        env = gym.wrappers.GrayScaleObservation(env)
+        env = gym.wrappers.FrameStack(env, 4)
+
+        env.action_space.seed(seed)
+        return env
+
+    return thunk
 
 def wandb_logging(wandb_prj_name, run_name, config=None, save_code=False):
     """
@@ -322,7 +377,7 @@ def generate_agent_labels(exp_settings, agent_abbrevation=False):
     return labels
 
 
-def record_video(env_id, agent, file, exp_type=None, greedy=False):
+def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: List[Callable]= []):
     """
     Records one episode of the agent acting on the environment env_id and saving the video to file.
     Args:
@@ -336,6 +391,8 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False):
     """
     frames = []
     env = gym.make(env_id)
+    for wrapper in env_wrapper:
+        env = wrapper(env)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if type(agent) == str:
@@ -372,7 +429,7 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False):
     anim.save(file, writer="ffmpeg", fps=30)
 
 
-def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=True):
+def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=True, env_wrapper: List[Callable]=[]):
     """
     Saves the agent model and records a video if video recording is enabled. Logs video to WandB if WandB is enabled.
     Args:
@@ -381,6 +438,7 @@ def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=T
         episode_step: Episode step
         greedy: Whether to use a greedy policy for video. Defaults to False
         print_path: Boolean flag to print model path. Defaults to True
+        env_wrapper: List of environment wrappers. Defaults to empty list
     Returns:
         None
     """
@@ -390,6 +448,6 @@ def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=T
     if exp_dict.capture_video:
         filepath, _ = create_folder_relative(f"{exp_folder}/{exp_dict.run_name}/videos")
         video_file = f"{filepath}/{episode_step}.mp4"
-        record_video(exp_dict.env_id, agent, video_file, greedy=greedy)
+        record_video(exp_dict.env_id, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
         if wandb.run is not None:
             wandb.log({"video": wandb.Video(video_file, fps=4, format="gif")})
