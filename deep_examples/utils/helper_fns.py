@@ -104,7 +104,7 @@ def make_env(env_id, seed):
     return thunk
 
 
-def make_atari_env(env_id, seed):
+def make_atari_breakout_env(env_id, seed):
     def thunk():
         env = gym.make(env_id)
         env = gym.wrappers.RecordEpisodeStatistics(env)
