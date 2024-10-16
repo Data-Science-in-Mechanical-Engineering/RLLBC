@@ -323,21 +323,21 @@ class FrozenLakeEnv(Env):
                 pygame.image.load(file_name), self.cell_size
             )
         if self.goal_img is None:
-            file_name = path.join(path.dirname(__file__), "img/goal.png")
+            file_name = path.join(path.dirname(__file__), "img/fish.png")
             self.goal_img = pygame.transform.scale(
                 pygame.image.load(file_name), self.cell_size
             )
         if self.start_img is None:
-            file_name = path.join(path.dirname(__file__), "img/stool.png")
+            file_name = path.join(path.dirname(__file__), "img/nest.png")
             self.start_img = pygame.transform.scale(
                 pygame.image.load(file_name), self.cell_size
             )
         if self.elf_images is None:
             elfs = [
-                path.join(path.dirname(__file__), "img/elf_left.png"),
-                path.join(path.dirname(__file__), "img/elf_down.png"),
-                path.join(path.dirname(__file__), "img/elf_right.png"),
-                path.join(path.dirname(__file__), "img/elf_up.png"),
+                path.join(path.dirname(__file__), "img/pen_left.png"),
+                path.join(path.dirname(__file__), "img/pen_down.png"),
+                path.join(path.dirname(__file__), "img/pen_right.png"),
+                path.join(path.dirname(__file__), "img/pen_up.png"),
             ]
             self.elf_images = [
                 pygame.transform.scale(pygame.image.load(f_name), self.cell_size)

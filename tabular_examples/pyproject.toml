@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "custom_envs"
+version = "0.0.2"
+description = "Custom environments for reinforcement learning and learning-based control"
+authors = [
+    { name = "Prof. Dr. Sebastian Trimpe", email = "rllbc@dsme.rwth-aachen.de" },
+    { name = "Dr. Friedrich Solowjow", email = "rllbc@dsme.rwth-aachen.de" }
+]
+dependencies = [
+    "gymnasium",
+    "numpy"
+]
+
+[tool.setuptools]
+packages = ["custom_envs"]
