@@ -1,7 +1,7 @@
-easydict==1.13
-gym==0.26.2
-gymnasium==1.0.0
 ale_py==0.10.1
+easydict==1.13
+gymnasium==1.0.0
+jupyterlab==4.2.5
 matplotlib==3.9.2
 numpy==2.1.2
 pandas==2.2.3
@@ -10,5 +10,5 @@ ruamel.base==1.0.0
 screeninfo==0.8.1
 seaborn==0.13.2
 setuptools==75.2.0
-stable_baselines3==2.3.2
 torch==2.4.1
+wandb==0.18.3
