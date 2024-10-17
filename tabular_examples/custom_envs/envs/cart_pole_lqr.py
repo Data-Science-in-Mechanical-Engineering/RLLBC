@@ -7,7 +7,7 @@ from matplotlib.animation import FuncAnimation
 from gymnasium import logger, spaces
 from gymnasium.envs.classic_control import utils
 
-class CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
+class CartPoleEnvLQR(gym.Env[np.ndarray, Union[int, np.ndarray]]):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "render_fps": 50,

@@ -17,8 +17,8 @@ register(
     entry_point='custom_envs.envs.cliff_walking:CliffWalkingEnv',
 )
 register(
-    id='CustomCartPole-v1',
-    entry_point='custom_envs.envs.cart_pole:CartPoleEnv',
+    id='CustomCartPoleLQR-v1',
+    entry_point='custom_envs.envs.cart_pole_lqr:CartPoleEnvLQR',
 )
 register(
     id='CustomCartPole-v2',

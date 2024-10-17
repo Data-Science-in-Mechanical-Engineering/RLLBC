@@ -7,8 +7,8 @@ name = "custom_envs"
 version = "0.0.2"
 description = "Custom environments for reinforcement learning and learning-based control"
 authors = [
-    { name = "Prof. Dr. Sebastian Trimpe", email = "rllbc@dsme.rwth-aachen.de" },
-    { name = "Dr. Friedrich Solowjow", email = "rllbc@dsme.rwth-aachen.de" }
+    { name = "Bernd Frauenknecht", email = "rllbc@dsme.rwth-aachen.de" },
+    { name = "Lukas Kesper", email = "rllbc@dsme.rwth-aachen.de" }
 ]
 dependencies = [
     "gymnasium",
