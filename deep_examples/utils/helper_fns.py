@@ -1,8 +1,9 @@
+# Adapted from: https://github.com/DLR-RM/stable-baselines3
+
 import os
 import warnings
 import collections
-from typing import Callable, List
-
+from typing import Callable, List, Dict, SupportsFloat
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -10,18 +11,23 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from ruamel.yaml import YAML
 from easydict import EasyDict as edict
+from gymnasium import spaces
 
-import gym
+import gymnasium as gym
 import wandb
 import torch
-from stable_baselines3.common.atari_wrappers import MaxAndSkipEnv, EpisodicLifeEnv, FireResetEnv, \
-    ClipRewardEnv
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=DeprecationWarning)
     from torch.utils.tensorboard import SummaryWriter
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+try:
+    import cv2
+    cv2.ocl.setUseOpenCL(False)
+except ImportError:
+    cv2 = None  # type: ignore[assignment]
 
 
 '''
@@ -288,7 +294,7 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         returns_over_runs: list of floats, representing the return of each run
         episode_len_over_runs: list of integers, representing the episode length of each run
     """
-    next_obs = torch.Tensor(envs.reset()).to("cuda" if torch.cuda.is_available() else "cpu")
+    next_obs = torch.Tensor(envs.reset()[0]).to("cuda" if torch.cuda.is_available() else "cpu")
     returns_over_runs = []
     episode_len_over_runs = []
     finish = False
@@ -297,15 +303,16 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
     while not finish:
         with torch.no_grad():
             actions = model.get_action(next_obs, greedy_actor)
-        next_obs, rewards, _, info = envs.step(actions.cpu().numpy())
+        next_obs, rewards, _, _, info = envs.step(actions.cpu().numpy())
         next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
-        for item in info:
-            if "episode" in item.keys():
-                returns_over_runs.append(item["episode"]["r"])
-                episode_len_over_runs.append(item["episode"]["l"])
-                if run_count==len(returns_over_runs):
-                    finish = True
-                    break
+        if '_episode' in info and 'episode' in info:
+            for i, item in enumerate(info['_episode']):
+                if item: 
+                    returns_over_runs.append(info['episode']['r'][i])
+                    episode_len_over_runs.append(info['episode']['l'][i])
+                    if run_count == len(returns_over_runs):
+                        finish = True
+                        break
     model.train()
     return returns_over_runs, episode_len_over_runs
 
@@ -390,7 +397,7 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
         None
     """
     frames = []
-    env = gym.make(env_id)
+    env = gym.make(env_id, render_mode='rgb_array')
     for wrapper in env_wrapper:
         env = wrapper(env)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -399,16 +406,17 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
         agent = load_model(run_name=agent, exp_type=exp_type)
 
     state, done = env.reset(), False
+    state = state[0]
     while not done:
         with torch.no_grad():
             action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
 
-        state, _, terminated, info = env.step(action.squeeze(0).cpu().numpy())
+        state, _, terminated, _, info = env.step(action.squeeze(0).cpu().numpy())
 
         if terminated:
             done = True
 
-        out = env.render(mode="rgb_array")
+        out = env.render()
         frames.append(out)
 
     env.close()
@@ -451,3 +459,139 @@ def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=T
         record_video(exp_dict.env_id, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
         if wandb.run is not None:
             wandb.log({"video": wandb.Video(video_file, fps=4, format="gif")})
+
+
+class FireResetEnv(gym.Wrapper[np.ndarray, int, np.ndarray, int]):
+    """
+    Take action on reset for environments that are fixed until firing.
+
+    :param env: Environment to wrap
+    """
+
+    def __init__(self, env: gym.Env) -> None:
+        super().__init__(env)
+        assert env.unwrapped.get_action_meanings()[1] == "FIRE"  # type: ignore[attr-defined]
+        assert len(env.unwrapped.get_action_meanings()) >= 3  # type: ignore[attr-defined]
+
+    def reset(self, **kwargs):
+        self.env.reset(**kwargs)
+        obs, _, terminated, truncated, _ = self.env.step(1)
+        if terminated or truncated:
+            self.env.reset(**kwargs)
+        obs, _, terminated, truncated, _ = self.env.step(2)
+        if terminated or truncated:
+            self.env.reset(**kwargs)
+        return obs, {}
+
+class EpisodicLifeEnv(gym.Wrapper[np.ndarray, int, np.ndarray, int]):
+    """
+    Make end-of-life == end-of-episode, but only reset on true game over.
+    Done by DeepMind for the DQN and co. since it helps value estimation.
+
+    :param env: Environment to wrap
+    """
+
+    def __init__(self, env: gym.Env) -> None:
+        super().__init__(env)
+        self.lives = 0
+        self.was_real_done = True
+
+    def step(self, action: int):
+        obs, reward, terminated, truncated, info = self.env.step(action)
+        self.was_real_done = terminated or truncated
+        # check current lives, make loss of life terminal,
+        # then update lives to handle bonus lives
+        lives = self.env.unwrapped.ale.lives()  # type: ignore[attr-defined]
+        if 0 < lives < self.lives:
+            # for Qbert sometimes we stay in lives == 0 condition for a few frames
+            # so its important to keep lives > 0, so that we only reset once
+            # the environment advertises done.
+            terminated = True
+        self.lives = lives
+        return obs, reward, terminated, truncated, info
+
+    def reset(self, **kwargs):
+        """
+        Calls the Gym environment reset, only when lives are exhausted.
+        This way all states are still reachable even though lives are episodic,
+        and the learner need not know about any of this behind-the-scenes.
+
+        :param kwargs: Extra keywords passed to env.reset() call
+        :return: the first observation of the environment
+        """
+        if self.was_real_done:
+            obs, info = self.env.reset(**kwargs)
+        else:
+            # no-op step to advance from terminal/lost life state
+            obs, _, terminated, truncated, info = self.env.step(0)
+
+            # The no-op step can lead to a game over, so we need to check it again
+            # to see if we should reset the environment and avoid the
+            # monitor.py `RuntimeError: Tried to step environment that needs reset`
+            if terminated or truncated:
+                obs, info = self.env.reset(**kwargs)
+        self.lives = self.env.unwrapped.ale.lives()  # type: ignore[attr-defined]
+        return obs, info
+
+class MaxAndSkipEnv(gym.Wrapper[np.ndarray, int, np.ndarray, int]):
+    """
+    Return only every ``skip``-th frame (frameskipping)
+    and return the max between the two last frames.
+
+    :param env: Environment to wrap
+    :param skip: Number of ``skip``-th frame
+        The same action will be taken ``skip`` times.
+    """
+
+    def __init__(self, env: gym.Env, skip: int = 4) -> None:
+        super().__init__(env)
+        # most recent raw observations (for max pooling across time steps)
+        assert env.observation_space.dtype is not None, "No dtype specified for the observation space"
+        assert env.observation_space.shape is not None, "No shape defined for the observation space"
+        self._obs_buffer = np.zeros((2, *env.observation_space.shape), dtype=env.observation_space.dtype)
+        self._skip = skip
+
+    def step(self, action: int):
+        """
+        Step the environment with the given action
+        Repeat action, sum reward, and max over last observations.
+
+        :param action: the action
+        :return: observation, reward, terminated, truncated, information
+        """
+        total_reward = 0.0
+        terminated = truncated = False
+        for i in range(self._skip):
+            obs, reward, terminated, truncated, info = self.env.step(action)
+            done = terminated or truncated
+            if i == self._skip - 2:
+                self._obs_buffer[0] = obs
+            if i == self._skip - 1:
+                self._obs_buffer[1] = obs
+            total_reward += float(reward)
+            if done:
+                break
+        # Note that the observation on the done=True frame
+        # doesn't matter
+        max_frame = self._obs_buffer.max(axis=0)
+
+        return max_frame, total_reward, terminated, truncated, info
+
+class ClipRewardEnv(gym.RewardWrapper):
+    """
+    Clip the reward to {+1, 0, -1} by its sign.
+
+    :param env: Environment to wrap
+    """
+
+    def __init__(self, env: gym.Env) -> None:
+        super().__init__(env)
+
+    def reward(self, reward: SupportsFloat) -> float:
+        """
+        Bin reward to {+1, 0, -1} by its sign.
+
+        :param reward:
+        :return:
+        """
+        return np.sign(float(reward))

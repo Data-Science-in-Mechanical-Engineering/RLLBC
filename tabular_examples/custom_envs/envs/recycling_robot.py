@@ -9,6 +9,10 @@ import time
 import pygame
 import gymnasium as gym
 
+import warnings
+warnings.filterwarnings("ignore",category=UserWarning)
+# To deal with gymnasium restrictions regarding the output of multiple frames in one render() call
+
 
 class RecyclingRobotEnv(Env):
     metadata = {
@@ -305,7 +309,7 @@ class RecyclingRobotEnv(Env):
             rgb_arrays.append(rgb_array)
 
         if not all(arr is None for arr in rgb_arrays):
-            return rgb_arrays
+            return np.stack(rgb_arrays)
 
     def _load_render(self, mode):
         if mode == "human":
