@@ -1,3 +1,5 @@
+"""This version of Pendulum gets rid of the visual rendering to make it more efficient for teaching purposes."""
+
 import numpy as np
 import gymnasium as gym
 from gymnasium.envs.classic_control.pendulum import PendulumEnv
@@ -15,6 +17,7 @@ class CustomPendulumEnv(PendulumEnv):
             low=np.float32(-high),
             high=np.float32(high),
             dtype=np.float32)
+        self.seed = None
 
     def step(self, action):
         super().step([action])
@@ -26,8 +29,12 @@ class CustomPendulumEnv(PendulumEnv):
             state[0] -= 2 * np.pi
         return np.float32(state), np.squeeze(reward), False, {}, {}
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         state = np.array([2 * (np.random.rand() - 0.5) * np.pi, 2 * (np.random.rand() - 0.5) * self.observation_space.high[1]])
         self.state = state
         info = {}
         return state, info
+    
+    def seed(self, seed=None):
+        # Set the seed for reproducibility
+        np.random.seed(seed)
