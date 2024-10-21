@@ -138,7 +138,7 @@ class CartPoleEnv_v2(gym.Env[np.ndarray, Union[int, np.ndarray]]):
 
         if self.render_mode == "human":
             self.render()
-        return np.array(self.state, dtype=np.float32), reward, terminated, False, {state_mean, cov}
+        return np.array(self.state, dtype=np.float32), reward, terminated, False, {"state_mean": state_mean, "cov": cov}
 
     def reset(
         self,
