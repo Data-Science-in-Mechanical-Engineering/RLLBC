@@ -19,6 +19,7 @@ dependencies:
     - screeninfo==0.8.1
     - seaborn==0.13.2
     - setuptools==75.2.0
+    - scikit-learn==1.5.2
     - torch==2.4.1
     - tqdm==4.66.5 
     - wandb==0.18.3
