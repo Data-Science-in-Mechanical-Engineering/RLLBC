@@ -294,25 +294,31 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         returns_over_runs: list of floats, representing the return of each run
         episode_len_over_runs: list of integers, representing the episode length of each run
     """
+    print('1')
     next_obs = torch.Tensor(envs.reset()[0]).to("cuda" if torch.cuda.is_available() else "cpu")
+    print('2')
     returns_over_runs = []
+    print('3')
     episode_len_over_runs = []
+    print('4')
     finish = False
+    print('5')
     envs.reset(seed=list(range(seed, seed+envs.num_envs)))
+    print('6')
     model.eval()
+    print('7')
     while not finish:
         with torch.no_grad():
             actions = model.get_action(next_obs, greedy_actor)
-        next_obs, rewards, _, _, info = envs.step(actions.cpu().numpy())
+        next_obs, rewards, _, _, infos = envs.step(actions.cpu().numpy())
         next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
-        if '_episode' in info and 'episode' in info:
-            for i, item in enumerate(info['_episode']):
-                if item: 
-                    returns_over_runs.append(info['episode']['r'][i])
-                    episode_len_over_runs.append(info['episode']['l'][i])
-                    if run_count == len(returns_over_runs):
-                        finish = True
-                        break
+        if "final_info" in infos:
+            for info in infos["final_info"]:
+                returns_over_runs.append(info['episode']['r'])
+                episode_len_over_runs.append(info['episode']['l'])
+                if run_count == len(returns_over_runs):
+                    finish = True
+                    break
     model.train()
     return returns_over_runs, episode_len_over_runs
 
@@ -411,11 +417,12 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
         with torch.no_grad():
             action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
 
-        state, _, terminated, _, info = env.step(action.squeeze(0).cpu().numpy())
+        state, _, terminated, truncated, info = env.step(action.squeeze(0).cpu().numpy())
 
-        if terminated:
+        if terminated or truncated: 
             done = True
 
+        print('ping')
         out = env.render()
         frames.append(out)
 

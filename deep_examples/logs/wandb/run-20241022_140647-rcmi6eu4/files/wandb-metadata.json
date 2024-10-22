@@ -1,0 +1,36 @@
+{
+  "os":  "macOS-14.6-arm64-arm-64bit",
+  "python":  "3.10.8",
+  "startedAt":  "2024-10-22T12:06:47.133529Z",
+  "program":  "sac.ipynb",
+  "git":  {
+    "remote":  "https://github.com/Data-Science-in-Mechanical-Engineering/RLLBC.git",
+    "commit":  "0e662e744bb3f9fef16e19dbd117a920c7426229"
+  },
+  "email":  "lukas.kesper98@gmail.com",
+  "root":  "/Users/kesperlukas/Projects/RLLBC/deep_examples/logs",
+  "host":  "177-103.eduroam.rwth-aachen.de",
+  "username":  "kesperlukas",
+  "executable":  "/Applications/Conda/miniconda3/envs/test_rllbc/bin/python",
+  "codePathLocal":  "sac.ipynb",
+  "cpu_count":  12,
+  "cpu_count_logical":  12,
+  "disk":  {
+    "/":  {
+      "total":  "494384795648",
+      "used":  "162151022592"
+    }
+  },
+  "memory":  {
+    "total":  "38654705664"
+  },
+  "cpu":  {
+    "count":  12,
+    "countLogical":  12
+  },
+  "gpuapple":  {
+    "gpuType":  "Apple M3 Pro",
+    "vendor":  "sppci_vendor_Apple",
+    "cores":  18
+  }
+}
