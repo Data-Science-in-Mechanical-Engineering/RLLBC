@@ -263,7 +263,7 @@ def save_model(model, run_name, exp_type=None, print_path=True):
     folder_path, _ = create_folder_relative(f"{exp_folder}/{run_name}")
     model_full_path = f"{folder_path}/agent_model.pt"
     with open(model_full_path, 'wb') as f:
-        torch.save(model, f)
+        torch.save(model.state_dict(), f)
     if print_path:
         print(f"Agent model saved to path: \n{model_full_path}")
 
@@ -275,7 +275,12 @@ def load_model(run_name=None, folder_path=None, exp_type=None):
     if folder_path is None:
         folder_path, path_exi = create_folder_relative(f"{exp_folder}/{run_name}", assert_flag=True)
     model_full_path = f"{folder_path}/agent_model.pt"
+    torch.serialization.add_safe_globals([set]) # necessary for safe loading
+    torch.serialization.add_safe_globals([torch.nn.Sequential])
+    torch.serialization.add_safe_globals([torch.nn.Linear])
+    
     model = torch.load(model_full_path,
+                       weights_only=True,
                        map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     return model
 
@@ -294,19 +299,12 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         returns_over_runs: list of floats, representing the return of each run
         episode_len_over_runs: list of integers, representing the episode length of each run
     """
-    print('1')
     next_obs = torch.Tensor(envs.reset()[0]).to("cuda" if torch.cuda.is_available() else "cpu")
-    print('2')
     returns_over_runs = []
-    print('3')
     episode_len_over_runs = []
-    print('4')
     finish = False
-    print('5')
     envs.reset(seed=list(range(seed, seed+envs.num_envs)))
-    print('6')
     model.eval()
-    print('7')
     while not finish:
         with torch.no_grad():
             actions = model.get_action(next_obs, greedy_actor)
@@ -314,11 +312,12 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
         if "final_info" in infos:
             for info in infos["final_info"]:
-                returns_over_runs.append(info['episode']['r'])
-                episode_len_over_runs.append(info['episode']['l'])
-                if run_count == len(returns_over_runs):
-                    finish = True
-                    break
+                if info and "episode" in info:
+                    returns_over_runs.append(info['episode']['r'])
+                    episode_len_over_runs.append(info['episode']['l'])
+                    if run_count == len(returns_over_runs):
+                        finish = True
+                        break
     model.train()
     return returns_over_runs, episode_len_over_runs
 
@@ -416,13 +415,12 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
     while not done:
         with torch.no_grad():
             action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
+        action = action.squeeze(0).cpu().numpy()
 
-        state, _, terminated, truncated, info = env.step(action.squeeze(0).cpu().numpy())
-
+        state, _, terminated, truncated, info = env.step(action)
+        
         if terminated or truncated: 
             done = True
-
-        print('ping')
         out = env.render()
         frames.append(out)
 
@@ -602,3 +600,25 @@ class ClipRewardEnv(gym.RewardWrapper):
         :return:
         """
         return np.sign(float(reward))
+
+def set_global(agent):
+    """
+    Adds all module types in the agent to the safe globals list for torch serialization.
+
+    Args:
+        agent: The agent whose module types are to be added to the safe globals list.
+    """
+    action_types = set()
+    # numpy types
+    for name in dir(np):
+        obj = getattr(np, name)
+        if isinstance(obj, type):
+            action_types.add(obj)
+    # torch types, depending on agent
+    for _, module in agent.named_modules():
+        action_types.add(type(module))
+        for sub_module in module.children():
+            action_types.add(type(sub_module))
+    # add to safe globals
+    for action_type in action_types:
+        torch.serialization.add_safe_globals([action_type])

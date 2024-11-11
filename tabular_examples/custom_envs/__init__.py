@@ -29,3 +29,8 @@ register(
     entry_point='custom_envs.envs.pendulum:CustomPendulumEnv',
     max_episode_steps=200,
 )
+register(
+    id='CustomDeepPendulum-v1',
+    entry_point='custom_envs.envs.deep_pendulum:CustomDeepPendulumEnv',
+    max_episode_steps=200,
+)

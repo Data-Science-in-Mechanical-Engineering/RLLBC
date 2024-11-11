@@ -263,20 +263,23 @@ def save_model(model, run_name, exp_type=None, print_path=True):
     folder_path, _ = create_folder_relative(f"{exp_folder}/{run_name}")
     model_full_path = f"{folder_path}/agent_model.pt"
     with open(model_full_path, 'wb') as f:
-        torch.save(model, f)
+        torch.save(model.state_dict(), f)
     if print_path:
         print(f"Agent model saved to path: \n{model_full_path}")
 
 
-def load_model(run_name=None, folder_path=None, exp_type=None):
+def load_model(run_name=None, folder_path=None, exp_type=None, agent_class=None, envs=None):
     exp_folder = "" if exp_type is None else exp_type
     if run_name is None:
         raise Exception("input run_name missing")
     if folder_path is None:
-        folder_path, path_exi = create_folder_relative(f"{exp_folder}/{run_name}", assert_flag=True)
+        folder_path, _ = create_folder_relative(f"{exp_folder}/{run_name}", assert_flag=True)
     model_full_path = f"{folder_path}/agent_model.pt"
-    model = torch.load(model_full_path,
-                       map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    
+    # Initialize the model architecture
+    model = agent_class(envs).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    state_dict = torch.load(model_full_path, weights_only = False, map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    model.load_state_dict(state_dict)
     return model
 
 
@@ -294,19 +297,12 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         returns_over_runs: list of floats, representing the return of each run
         episode_len_over_runs: list of integers, representing the episode length of each run
     """
-    print('1')
     next_obs = torch.Tensor(envs.reset()[0]).to("cuda" if torch.cuda.is_available() else "cpu")
-    print('2')
     returns_over_runs = []
-    print('3')
     episode_len_over_runs = []
-    print('4')
     finish = False
-    print('5')
     envs.reset(seed=list(range(seed, seed+envs.num_envs)))
-    print('6')
     model.eval()
-    print('7')
     while not finish:
         with torch.no_grad():
             actions = model.get_action(next_obs, greedy_actor)
@@ -314,11 +310,12 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
         if "final_info" in infos:
             for info in infos["final_info"]:
-                returns_over_runs.append(info['episode']['r'])
-                episode_len_over_runs.append(info['episode']['l'])
-                if run_count == len(returns_over_runs):
-                    finish = True
-                    break
+                if info and "episode" in info:
+                    returns_over_runs.append(info['episode']['r'])
+                    episode_len_over_runs.append(info['episode']['l'])
+                    if run_count == len(returns_over_runs):
+                        finish = True
+                        break
     model.train()
     return returns_over_runs, episode_len_over_runs
 
@@ -390,11 +387,13 @@ def generate_agent_labels(exp_settings, agent_abbrevation=False):
     return labels
 
 
-def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: List[Callable]= []):
+def record_video(env_id, envs, agent_class, agent, file, exp_type=None, greedy=False, env_wrapper: List[Callable]= []):
     """
     Records one episode of the agent acting on the environment env_id and saving the video to file.
     Args:
         env_id: The environment id for the agent to run in e.g. Cartpole-v1
+        envs: Vectorized environment used for training
+        agent_class: Class of the agent to be loaded.
         agent: Either a pytorch model or name of a finished experiment
         file: the file to which the video is written to
         exp_type: the experiment type to which the agent is belonging (if it is provided by name string instead of model)
@@ -409,20 +408,19 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if type(agent) == str:
-        agent = load_model(run_name=agent, exp_type=exp_type)
+        agent = load_model(run_name=agent, exp_type=exp_type, agent_class=agent_class, envs=envs)
 
     state, done = env.reset(), False
     state = state[0]
     while not done:
         with torch.no_grad():
             action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
+        action = action.squeeze(0).cpu().numpy()
 
-        state, _, terminated, truncated, info = env.step(action.squeeze(0).cpu().numpy())
-
+        state, _, terminated, truncated, info = env.step(action)
+        
         if terminated or truncated: 
             done = True
-
-        print('ping')
         out = env.render()
         frames.append(out)
 
@@ -444,11 +442,13 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
     anim.save(file, writer="ffmpeg", fps=30)
 
 
-def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=True, env_wrapper: List[Callable]=[]):
+def save_and_log_agent(exp_dict, envs, agent_class, agent, episode_step, greedy=False, print_path=True, env_wrapper: List[Callable]=[]):
     """
     Saves the agent model and records a video if video recording is enabled. Logs video to WandB if WandB is enabled.
     Args:
         exp_dict: Dictionary of experiment parameters.
+        envs: Vectorized environment used for training.
+        agent_class: Class of the agent to be saved.
         agent: Agent model to be saved.
         episode_step: Episode step
         greedy: Whether to use a greedy policy for video. Defaults to False
@@ -463,7 +463,7 @@ def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=T
     if exp_dict.capture_video:
         filepath, _ = create_folder_relative(f"{exp_folder}/{exp_dict.run_name}/videos")
         video_file = f"{filepath}/{episode_step}.mp4"
-        record_video(exp_dict.env_id, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
+        record_video(exp_dict.env_id, envs, agent_class, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
         if wandb.run is not None:
             wandb.log({"video": wandb.Video(video_file, fps=4, format="gif")})
 
@@ -602,3 +602,25 @@ class ClipRewardEnv(gym.RewardWrapper):
         :return:
         """
         return np.sign(float(reward))
+
+def set_global(agent):
+    """
+    Adds all module types in the agent to the safe globals list for torch serialization.
+
+    Args:
+        agent: The agent whose module types are to be added to the safe globals list.
+    """
+    action_types = set()
+    # numpy types
+    for name in dir(np):
+        obj = getattr(np, name)
+        if isinstance(obj, type):
+            action_types.add(obj)
+    # torch types, depending on agent
+    for _, module in agent.named_modules():
+        action_types.add(type(module))
+        for sub_module in module.children():
+            action_types.add(type(sub_module))
+    # add to safe globals
+    for action_type in action_types:
+        torch.serialization.add_safe_globals([action_type])
