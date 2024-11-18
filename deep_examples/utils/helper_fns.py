@@ -67,10 +67,12 @@ class NoopResetEnv(gym.Wrapper):
         assert noops > 0
         obs = np.zeros(0)
         for _ in range(noops):
-            obs, _, done, _ = self.env.step(self.noop_action)
+            obs, _, termination, truncation, info = self.env.step(self.noop_action)
+            done = np.logical_or(termination, truncation)
             if done:
                 obs = self.env.reset(**kwargs)
-        return obs
+                info = '_' # easy fix to stick to gymnasium notation
+        return obs, info
 
 def make_single_env(env_id, seed):
     """
@@ -398,9 +400,12 @@ def record_video(env_id, envs, agent_class, agent, file, exp_type=None, greedy=F
         file: the file to which the video is written to
         exp_type: the experiment type to which the agent is belonging (if it is provided by name string instead of model)
         greedy: whether the agent performs actions in a greedy way
+        env_wrapper: List of env wrappers
+        wrapper_options: List of options for specific wrappers
     Return:
         None
     """
+    
     frames = []
     env = gym.make(env_id, render_mode='rgb_array')
     for wrapper in env_wrapper:
@@ -410,17 +415,17 @@ def record_video(env_id, envs, agent_class, agent, file, exp_type=None, greedy=F
     if type(agent) == str:
         agent = load_model(run_name=agent, exp_type=exp_type, agent_class=agent_class, envs=envs)
 
-    state, done = env.reset(), False
-    state = state[0]
+    state, _ = env.reset()
+    state = state
+    done = False
     while not done:
         with torch.no_grad():
-            action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
+            action = agent.get_action(torch.tensor(np.array(state)).unsqueeze(0).to(device), greedy=greedy)
         action = action.squeeze(0).cpu().numpy()
 
         state, _, terminated, truncated, info = env.step(action)
+        done = np.logical_or(terminated, truncated)
         
-        if terminated or truncated: 
-            done = True
         out = env.render()
         frames.append(out)
 
@@ -527,7 +532,8 @@ class EpisodicLifeEnv(gym.Wrapper[np.ndarray, int, np.ndarray, int]):
         :return: the first observation of the environment
         """
         if self.was_real_done:
-            obs, info = self.env.reset(**kwargs)
+            obs = self.env.reset(**kwargs)
+            info = '_' # easy fix to keep gymnasium notation
         else:
             # no-op step to advance from terminal/lost life state
             obs, _, terminated, truncated, info = self.env.step(0)

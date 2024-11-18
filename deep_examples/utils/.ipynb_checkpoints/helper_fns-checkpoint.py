@@ -67,10 +67,12 @@ class NoopResetEnv(gym.Wrapper):
         assert noops > 0
         obs = np.zeros(0)
         for _ in range(noops):
-            obs, _, done, _ = self.env.step(self.noop_action)
+            obs, _, termination, truncation, info = self.env.step(self.noop_action)
+            done = np.logical_or(termination, truncation)
             if done:
                 obs = self.env.reset(**kwargs)
-        return obs
+                info = '_' # easy fix to stick to gymnasium notation
+        return obs, info
 
 def make_single_env(env_id, seed):
     """
@@ -268,20 +270,18 @@ def save_model(model, run_name, exp_type=None, print_path=True):
         print(f"Agent model saved to path: \n{model_full_path}")
 
 
-def load_model(run_name=None, folder_path=None, exp_type=None):
+def load_model(run_name=None, folder_path=None, exp_type=None, agent_class=None, envs=None):
     exp_folder = "" if exp_type is None else exp_type
     if run_name is None:
         raise Exception("input run_name missing")
     if folder_path is None:
-        folder_path, path_exi = create_folder_relative(f"{exp_folder}/{run_name}", assert_flag=True)
+        folder_path, _ = create_folder_relative(f"{exp_folder}/{run_name}", assert_flag=True)
     model_full_path = f"{folder_path}/agent_model.pt"
-    torch.serialization.add_safe_globals([set]) # necessary for safe loading
-    torch.serialization.add_safe_globals([torch.nn.Sequential])
-    torch.serialization.add_safe_globals([torch.nn.Linear])
     
-    model = torch.load(model_full_path,
-                       weights_only=True,
-                       map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    # Initialize the model architecture
+    model = agent_class(envs).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    state_dict = torch.load(model_full_path, weights_only = False, map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    model.load_state_dict(state_dict)
     return model
 
 
@@ -389,18 +389,23 @@ def generate_agent_labels(exp_settings, agent_abbrevation=False):
     return labels
 
 
-def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: List[Callable]= []):
+def record_video(env_id, envs, agent_class, agent, file, exp_type=None, greedy=False, env_wrapper: List[Callable]= []):
     """
     Records one episode of the agent acting on the environment env_id and saving the video to file.
     Args:
         env_id: The environment id for the agent to run in e.g. Cartpole-v1
+        envs: Vectorized environment used for training
+        agent_class: Class of the agent to be loaded.
         agent: Either a pytorch model or name of a finished experiment
         file: the file to which the video is written to
         exp_type: the experiment type to which the agent is belonging (if it is provided by name string instead of model)
         greedy: whether the agent performs actions in a greedy way
+        env_wrapper: List of env wrappers
+        wrapper_options: List of options for specific wrappers
     Return:
         None
     """
+    
     frames = []
     env = gym.make(env_id, render_mode='rgb_array')
     for wrapper in env_wrapper:
@@ -408,19 +413,19 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if type(agent) == str:
-        agent = load_model(run_name=agent, exp_type=exp_type)
+        agent = load_model(run_name=agent, exp_type=exp_type, agent_class=agent_class, envs=envs)
 
-    state, done = env.reset(), False
-    state = state[0]
+    state, _ = env.reset()
+    state = state
+    done = False
     while not done:
         with torch.no_grad():
-            action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
+            action = agent.get_action(torch.tensor(np.array(state)).unsqueeze(0).to(device), greedy=greedy)
         action = action.squeeze(0).cpu().numpy()
 
         state, _, terminated, truncated, info = env.step(action)
+        done = np.logical_or(terminated, truncated)
         
-        if terminated or truncated: 
-            done = True
         out = env.render()
         frames.append(out)
 
@@ -442,11 +447,13 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
     anim.save(file, writer="ffmpeg", fps=30)
 
 
-def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=True, env_wrapper: List[Callable]=[]):
+def save_and_log_agent(exp_dict, envs, agent_class, agent, episode_step, greedy=False, print_path=True, env_wrapper: List[Callable]=[]):
     """
     Saves the agent model and records a video if video recording is enabled. Logs video to WandB if WandB is enabled.
     Args:
         exp_dict: Dictionary of experiment parameters.
+        envs: Vectorized environment used for training.
+        agent_class: Class of the agent to be saved.
         agent: Agent model to be saved.
         episode_step: Episode step
         greedy: Whether to use a greedy policy for video. Defaults to False
@@ -461,7 +468,7 @@ def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=T
     if exp_dict.capture_video:
         filepath, _ = create_folder_relative(f"{exp_folder}/{exp_dict.run_name}/videos")
         video_file = f"{filepath}/{episode_step}.mp4"
-        record_video(exp_dict.env_id, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
+        record_video(exp_dict.env_id, envs, agent_class, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
         if wandb.run is not None:
             wandb.log({"video": wandb.Video(video_file, fps=4, format="gif")})
 
@@ -525,7 +532,8 @@ class EpisodicLifeEnv(gym.Wrapper[np.ndarray, int, np.ndarray, int]):
         :return: the first observation of the environment
         """
         if self.was_real_done:
-            obs, info = self.env.reset(**kwargs)
+            obs = self.env.reset(**kwargs)
+            info = '_' # easy fix to keep gymnasium notation
         else:
             # no-op step to advance from terminal/lost life state
             obs, _, terminated, truncated, info = self.env.step(0)
