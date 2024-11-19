@@ -1,4 +1,4 @@
-name: rllbc
+name: rllbc-2
 channels:
   - conda-forge
   - defaults
@@ -9,7 +9,7 @@ dependencies:
     - ale_py==0.10.1
     - control==0.10.1
     - easydict==1.13
-    - gymnasium==1.0.0
+    - gymnasium==0.29.1
     - ipywidgets==8.1.5
     - jupyterlab==4.2.5
     - matplotlib==3.9.2
@@ -23,8 +23,8 @@ dependencies:
     - screeninfo==0.8.1
     - seaborn==0.13.2
     - setuptools==75.2.0
-    - stable-baselines3==2.4.0
+    - stable-baselines3==2.5.0a0 # should be replaced by a stable build when available
     - tensorboard==2.18.0
-    - torch==2.4.1
+    - torch==2.3.1
     - tqdm==4.66.5 
     - wandb==0.18.3

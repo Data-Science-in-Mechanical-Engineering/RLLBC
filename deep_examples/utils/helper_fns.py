@@ -310,7 +310,7 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
             actions = model.get_action(next_obs, greedy_actor)
         next_obs, rewards, _, _, infos = envs.step(actions.cpu().numpy())
         next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
-        if "final_info" in infos:
+        if "final_info" in infos: 
             for info in infos["final_info"]:
                 if info and "episode" in info:
                     returns_over_runs.append(info['episode']['r'])
