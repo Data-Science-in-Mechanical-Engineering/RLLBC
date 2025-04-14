@@ -17,27 +17,21 @@ To install the library, please follow the instructions below.
 
 1. **Download the files**
 
-1. **Install the latest version of Miniconda** https://docs.conda.io/en/latest/miniconda.html
+1. **Install the latest version of UV** https://docs.astral.sh/uv/#installation
    - make sure that you install the version for the operating system that you are using
-   - alternatively you could install (or use) Anaconda, which is more extensive than Miniconda. However, for the purpose of this course Miniconda is enough.
 
-2. **Create the conda environment** from the `environment.yml` file with
+2. **Create the uv environment**
       ```setup 
-      conda env create -f environment.yml 
+      uv venv
       ```
-   - when using Windows, for the command to work you need to open the conda shell in the directory of the environment file.
-
 3. **Activate the environment** with 
    ```setup 
-   conda activate rllbc-library
+   source .venv/bin/activate
    ```
-
-3. **Install the custom environments**, that we use for out tabular examples. If conda has been used, navigate to `./tabular_examples` and run
-   ```setup 
-   pip install -e .
-   ```
-    in the same directory as the `setup.py`.
-   
+   and install the required packages with
+   ```setup
+   uv pip sync ./requirements.tx
+    ```
 4. **Start up JupyterLab** from your terminal with
    ```setup 
    jupyter-lab
@@ -61,3 +55,13 @@ Once the environment has been successfully installed, the library can be easily 
    jupyter-lab
    ```
 You are ready to browse the library.
+
+
+## Dev notes
+
+To update the requirement.txt do:
+```setup
+uv pip compile requirements.in \
+   --universal \
+   --output-file requirements.txt
+```
