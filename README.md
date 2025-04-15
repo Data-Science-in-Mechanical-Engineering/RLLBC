@@ -22,7 +22,7 @@ To install the library, please follow the instructions below.
 
 2. **Create the uv environment**
       ```setup 
-      uv venv
+      uv venv -p 3.10
       ```
 3. **Activate the environment** with 
    ```setup 
@@ -30,7 +30,7 @@ To install the library, please follow the instructions below.
    ```
    and install the required packages with
    ```setup
-   uv pip sync ./requirements.tx
+   uv pip sync ./requirements.txt
     ```
 4. **Start up JupyterLab** from your terminal with
    ```setup 

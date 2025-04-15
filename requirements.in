@@ -28,3 +28,4 @@ PyQt5
 easydict
 ruamel.yaml
 -e ./tabular_examples
+nbgrader
