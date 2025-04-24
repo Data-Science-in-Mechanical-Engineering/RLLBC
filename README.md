@@ -45,10 +45,10 @@ To install the library, please follow the instructions below.
 
 ### Using the library on a local computer:
 Once the environment has been successfully installed, the library can be easily accessed via the following steps:
-1. **Navigate to the project folder** and open your terminal there. On Windows, use the Anaconda Prompt.
+1. **Navigate to the project folder** and open your terminal there. On Windows, use the powershell.
 2. **Activate the environment** with 
    ```setup 
-   conda activate rllbc-library
+   source .venv/bin/activate
    ```
 3. **Start up JupyterLab** from your terminal with
    ```setup 
