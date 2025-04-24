@@ -24,7 +24,7 @@ stable-baselines3==1.2.0
 gym==0.23.1
 gymnasium==0.26.3
 jupyterlab-tensorboard-pro
-PyQt5
+PyQt6
 easydict
 ruamel.yaml
 -e ./tabular_examples
