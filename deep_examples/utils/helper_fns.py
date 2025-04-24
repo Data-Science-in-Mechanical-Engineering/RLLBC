@@ -270,7 +270,8 @@ def load_model(run_name=None, folder_path=None, exp_type=None):
         folder_path, path_exi = create_folder_relative(f"{exp_folder}/{run_name}", assert_flag=True)
     model_full_path = f"{folder_path}/agent_model.pt"
     model = torch.load(model_full_path,
-                       map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+                       map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+                       weights_only=False)
     return model
 
 
