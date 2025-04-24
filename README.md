@@ -24,10 +24,14 @@ To install the library, please follow the instructions below.
       ```setup 
       uv venv -p 3.10
       ```
-3. **Activate the environment** with 
+3. **Activate the environment** on Linux with 
    ```setup 
    source .venv/bin/activate
    ```
+   or on Windows with
+   ```setup
+    .venv\Scripts\activate
+    ```
    and install the required packages with
    ```setup
    uv pip sync ./requirements.txt
@@ -50,6 +54,10 @@ Once the environment has been successfully installed, the library can be easily 
    ```setup 
    source .venv/bin/activate
    ```
+   or on Windows with
+   ```setup
+    .venv\Scripts\activate
+    ```
 3. **Start up JupyterLab** from your terminal with
    ```setup 
    jupyter-lab
