@@ -15,6 +15,15 @@
 # Set the directory in which to search; default to current directory.
 SEARCH_DIR="${1:-.}"
 
+# File that stores the list of successfully tested notebook absolute paths.
+TESTED_FILE="tested.txt"
+
+# Create tested.txt if it does not exist.
+if [ ! -f "$TESTED_FILE" ]; then
+    touch "$TESTED_FILE"
+fi
+
+
 # Define an array of patterns for files to be excluded.
 # Adjust or add patterns as required.
 EXCLUDES=(".ipynb_checkpoints" "another_pattern_to_exclude")
@@ -38,16 +47,15 @@ execute_notebook() {
     # Create a temporary file to store the executed notebook.
     tmp_output=$(mktemp --suffix=.ipynb)
 
-    # Execute the notebook; any error in a cell will cause a non-zero exit status.
-    # The executed notebook is saved to the temporary file (and removed later).
-    # Error output is captured in error.log.
+    # Execute the notebook using nbconvert.
+    # If any cell fails, nbconvert returns a nonzero exit status.
     jupyter nbconvert --to notebook --execute "$notebook" --output "$tmp_output" 2>error.log
     ret=$?
     if [ $ret -ne 0 ]; then
         echo "Error encountered while executing notebook: $notebook"
         echo "Error details:"
         cat error.log
-        # Clean up temporary files and stop processing further notebooks.
+        # Clean up temporary files and exit.
         rm error.log "$tmp_output"
         exit 1
     else
@@ -57,21 +65,30 @@ execute_notebook() {
 }
 
 # Find all .ipynb files recursively in the specified directory.
-# Using IFS workaround to handle filenames with spaces.
 IFS=$'\n'
 file_list=($(find "$SEARCH_DIR" -type f -name "*.ipynb"))
 unset IFS
 
-# Loop through each found notebook.
+# Process each notebook found.
 for notebook in "${file_list[@]}"; do
-    # Skip the notebook if it matches any of the exclusion patterns.
-    if should_exclude "$notebook"; then
-        echo "Skipping excluded notebook: $notebook"
+    # Get the absolute path of the notebook.
+    abs_path=$(readlink -f "$notebook")
+
+    # If the notebook is already logged in tested.txt, skip it.
+    if grep -Fqx "$abs_path" "$TESTED_FILE"; then
+        echo "Skipping already tested notebook: $abs_path"
         continue
     fi
 
-    # Execute the notebook and stop if an error occurs.
-    execute_notebook "$notebook"
+    # Skip notebook if it matches any exclude pattern.
+    if should_exclude "$abs_path"; then
+        echo "Skipping excluded notebook: $abs_path"
+        continue
+    fi
+
+    # Execute the notebook; if it executes successfully, log its absolute path.
+    execute_notebook "$abs_path"
+    echo "$abs_path" >> "$TESTED_FILE"
 done
 
 echo "All notebooks executed successfully."
