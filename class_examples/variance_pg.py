@@ -21,7 +21,7 @@ def grad_log_policy(theta, action):
         return -prob
 
 # Rewards for actions
-rewards = [1, 0]
+rewards = [1, 0.1]
 
 # Parameters
 theta = 0.0  # Initial parameter
@@ -59,6 +59,18 @@ var_with_baseline = np.var(grads_with_baseline)
 # Print variances
 print(f"Variance without baseline: {var_no_baseline:.6f}")
 print(f"Variance with baseline:    {var_with_baseline:.6f}")
+
+# Plot the first n grads with and without baseline as diarcs
+n_grads_plot = 10
+plt.figure()
+plt.stem(range(n_grads_plot), grad_no_baseline[:n_grads_plot], linefmt='C0-', markerfmt='C0o', basefmt='k-', label="no_baseline")
+plt.stem(range(n_grads_plot), grad_with_baseline[:n_grads_plot], linefmt='C1-', markerfmt='C1o', basefmt='k-', label="with_baseline")
+plt.title('Policy Gradients with and without Baseline')
+plt.xlabel('Step')
+plt.ylabel('Gradient Estimate')
+plt.legend()
+plt.show()
+
 
 # Visualize the results
 plt.figure(figsize=(10,5))
