@@ -1,0 +1,44 @@
+[project]
+name = "rllbc-library"
+version = "0.1.0"
+description = "Reinforcement learning environment with Jupyter and Gym support"
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "win-64"]
+
+[tool.pixi.dependencies]
+python = "3.10.*"
+ffmpeg = "*"
+
+[tool.pixi.pypi-dependencies]
+ipykernel = "*"
+ipympl = "*"
+ipywidgets = "*"
+jupyterlab = "*"
+jupyterlab-lsp = "*"
+python-lsp-server = "*"
+jupyterlab-git = "*"
+screeninfo = "*"
+box2d = "*"
+numpy = "==1.23.*"
+pandas = "*"
+tqdm = "*"
+wandb = "*"
+seaborn = "*"
+matplotlib = "*"
+torch = "*"
+tensorboard = "*"
+envkernel = "*"
+control = "*"
+scikit-learn = "*"
+swig = "*"
+pygame = "*"
+stable-baselines3 = "==1.2.0"
+gym = "==0.23.1"
+gymnasium = "==0.26.3"
+jupyterlab-tensorboard-pro = "*"
+PyQt6 = "*"
+easydict = "*"
+"ruamel.yaml" = "*"
+custom-envs = { path = "./tabular_examples", editable = true }
