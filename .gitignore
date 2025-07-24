@@ -428,3 +428,4 @@ $RECYCLE.BIN/
 logs/
 deep_examples/logs/
 *.pyc
+.DS_Store
