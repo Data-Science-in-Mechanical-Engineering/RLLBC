@@ -17,25 +17,17 @@ To install the library, please follow the instructions below.
 
 1. **Download the files**
 
-1. **Install the latest version of UV** https://docs.astral.sh/uv/#installation
+1. **Install the latest version of Pixi** https://pixi.sh/latest/installation/
    - make sure that you install the version for the operating system that you are using
 
 2. **Create the uv environment**
       ```setup 
-      uv venv -p 3.10
+      pixi install
       ```
-3. **Activate the environment** on Linux with 
+3. **Activate the environment**
    ```setup 
-   source .venv/bin/activate
+   pixi shell
    ```
-   or on Windows with
-   ```setup
-    .venv\Scripts\activate
-    ```
-   and install the required packages with
-   ```setup
-   uv pip sync ./requirements.txt
-    ```
 4. **Start up JupyterLab** from your terminal with
    ```setup 
    jupyter-lab
@@ -43,33 +35,15 @@ To install the library, please follow the instructions below.
 
 &rarr; Now you should be able to browse your file system for the notebooks
 
-*Note*: In order to be able to render videos of the agent's performance you have to make sure to have `ffmpeg` installed.
-
-*Warning*: pybox2d is not available for Apple Silicon devices (Mac with M1, M2, or M3 processors). When working with Apple Silicon devices, this might cause issues. For installation, remove pybox2d from the list of required packages in the `environment.yml` file.
-
 ### Using the library on a local computer:
 Once the environment has been successfully installed, the library can be easily accessed via the following steps:
 1. **Navigate to the project folder** and open your terminal there. On Windows, use the powershell.
 2. **Activate the environment** with 
    ```setup 
-   source .venv/bin/activate
+   pixi shell
    ```
-   or on Windows with
-   ```setup
-    .venv\Scripts\activate
-    ```
 3. **Start up JupyterLab** from your terminal with
    ```setup 
    jupyter-lab
    ```
 You are ready to browse the library.
-
-
-## Dev notes
-
-To update the requirement.txt do:
-```setup
-uv pip compile requirements.in \
-   --universal \
-   --output-file requirements.txt
-```
