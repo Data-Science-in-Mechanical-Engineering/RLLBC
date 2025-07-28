@@ -10,7 +10,7 @@ platforms = ["linux-64", "osx-64", "win-64","osx-arm64"]
 [tool.pixi.dependencies]
 python = "==3.10.18"
 ffmpeg = "==7.1.1"
-
+pycairo="==1.28.0"
 [tool.pixi.pypi-dependencies]
 ipykernel = "==6.29.5"
 ipympl = "==0.9.7"
@@ -42,7 +42,6 @@ easydict = "==1.13"
 nbgrader ="==0.8.5"
 shapely="==2.1.1"
 numba = "==0.60.0"
-pycairo="==1.28.0"
 GitPython="==3.1.40"
 pytz="==2025.2"
 schedule="==1.2.1"
