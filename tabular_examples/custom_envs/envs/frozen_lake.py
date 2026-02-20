@@ -232,11 +232,26 @@ class FrozenLakeEnv(Env):
 
         self.render_mode = render_mode
 
-        self.window_size = (get_monitors()[0].height-50,get_monitors()[0].height-50)
-        self.cell_size = (
-            self.window_size[0] // self.ncol,
-            self.window_size[1] // self.nrow,
+        # Default size works in headless setups.
+        self.cell_size = (64, 64)
+        self.window_size = (
+            self.ncol * self.cell_size[0],
+            self.nrow * self.cell_size[1],
         )
+        # If a monitor is available, keep the larger display-based sizing.
+        if self.render_mode in {"human", "rgb_array"}:
+            try:
+                monitors = get_monitors()
+                if monitors:
+                    window_edge = max(64, monitors[0].height - 50)
+                    self.window_size = (window_edge, window_edge)
+                    self.cell_size = (
+                        max(1, self.window_size[0] // self.ncol),
+                        max(1, self.window_size[1] // self.nrow),
+                    )
+            except Exception:
+                # No display available (e.g., container/CI): keep fallback sizing.
+                pass
         self.window_surface = None
         self.clock = None
         self.hole_img = None
