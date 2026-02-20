@@ -11,7 +11,7 @@ from matplotlib.animation import FuncAnimation
 from ruamel.yaml import YAML
 from easydict import EasyDict as edict
 
-import gym
+import gymnasium as gym
 import wandb
 import torch
 from stable_baselines3.common.atari_wrappers import MaxAndSkipEnv, EpisodicLifeEnv, FireResetEnv, \
@@ -26,13 +26,13 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 '''
 Here is a list of important helper functions (in no particular order). You may come back to this later as you start getting more into the different sections of the notebook. For now, here a quick preview:
-1. `make_single_env`, `make_env` - helps in creating a single gym environment
-2. `make_env` - helps in creating a vectorized gym environment
+1. `make_single_env`, `make_env` - helps in creating a single gymnasium environment
+2. `make_env` - helps in creating a vectorized gymnasium environment
 3. `setup_logging` - setup Weights & Biases and TensorBoard logging
 4. `save_train_config_to_yaml`, `save_model` and `save_tracked_values` - at the end training
 5. `evaluate_agent` - used to evaluate agent performance during or post-training
 6. plotter functions to generate plot in the section **Compare Trained Agents and Display Behaviour**
-7. 'make_atari_env' - helps in creating a vectorized gym environment for the Breakeout Atari game
+7. 'make_atari_env' - helps in creating a vectorized gymnasium environment for the Breakeout Atari game
 '''
 
 
@@ -61,19 +61,19 @@ class NoopResetEnv(gym.Wrapper):
         assert noops > 0
         obs = np.zeros(0)
         for _ in range(noops):
-            obs, _, done, _ = self.env.step(self.noop_action)
-            if done:
-                obs = self.env.reset(**kwargs)
-        return obs
+            obs, _, terminated,truncated, _ = self.env.step(self.noop_action)
+            if terminated | truncated:
+                obs, _ = self.env.reset(**kwargs)
+        return obs, {}
 
 def make_single_env(env_id, seed):
     """
-    Creates a single instance of a Gym environment with the given ID and seed
+    Creates a single instance of a gymnasium environment with the given ID and seed
     Args:
-        env_id: string containing the ID of the Gym environment to create
+        env_id: string containing the ID of the gymnasium environment to create
         seed: integer seed value to use for the environment's random number generator
     Returns:
-        A Gym environment object
+        A gymnasium environment object
     """
     env = gym.make(env_id)
     env = gym.wrappers.RecordEpisodeStatistics(env)
@@ -86,12 +86,12 @@ def make_single_env(env_id, seed):
 
 def make_env(env_id, seed):
     """
-    Returns a thunk that creates and initializes a gym environment with the given ID and seed
+    Returns a thunk that creates and initializes a gymnasium environment with the given ID and seed
     Args:
-        env_id: string identifying the gym environment to create
+        env_id: string identifying the gymnasium environment to create
         seed: integer specifying the random seed to use for the environment
     Returns:
-        callable thunk that creates and returns a gym environment with a seeded initial state, action space, and observation spaces
+        callable thunk that creates and returns a gymnasium environment with a seeded initial state, action space, and observation spaces
     """
 
     def thunk():
@@ -106,20 +106,16 @@ def make_env(env_id, seed):
 
 def make_atari_breakout_env(env_id, seed):
     def thunk():
+
         env = gym.make(env_id)
-        env = gym.wrappers.RecordEpisodeStatistics(env)
-
-        env = NoopResetEnv(env, noop_max=30)
-        env = MaxAndSkipEnv(env, skip=4)
-        env = EpisodicLifeEnv(env)
-        if "FIRE" in env.unwrapped.get_action_meanings():
-            env = FireResetEnv(env)
-        env = ClipRewardEnv(env)
-        env = gym.wrappers.ResizeObservation(env, (84, 84))
-        env = gym.wrappers.GrayScaleObservation(env)
+        env = gym.wrappers.AtariPreprocessing(env, frame_skip=4, grayscale_obs=True, scale_obs=False, terminal_on_life_loss=False)
         env = gym.wrappers.FrameStack(env, 4)
-
+        env = ClipRewardEnv(env)
+        env = gym.wrappers.RecordEpisodeStatistics(env)
         env.action_space.seed(seed)
+        env.observation_space.seed(seed)
+        np.random.seed(seed)
+
         return env
 
     return thunk
@@ -274,12 +270,11 @@ def load_model(run_name=None, folder_path=None, exp_type=None):
                        weights_only=False)
     return model
 
-
 def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
     """
     Evaluate an agent on vectorized environment and return the returns and episode lengths of each run
     Args:
-        envs: vectorized gym environment
+        envs: vectorized gymnasium environment
         model: agent's policy model
         run_count: integer value specifying the number of runs to evaluate the agent
         seed: integer value representing the initial random seed
@@ -289,24 +284,26 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
         returns_over_runs: list of floats, representing the return of each run
         episode_len_over_runs: list of integers, representing the episode length of each run
     """
-    next_obs = torch.Tensor(envs.reset()).to("cuda" if torch.cuda.is_available() else "cpu")
+    next_obs, _= envs.reset(seed=list(range(seed, seed+envs.num_envs)))
+    next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
     returns_over_runs = []
     episode_len_over_runs = []
     finish = False
-    envs.reset(seed=list(range(seed, seed+envs.num_envs)))
     model.eval()
     while not finish:
         with torch.no_grad():
             actions = model.get_action(next_obs, greedy_actor)
-        next_obs, rewards, _, info = envs.step(actions.cpu().numpy())
+        next_obs, rewards, _,_, info = envs.step(actions.cpu().numpy())
         next_obs = torch.Tensor(next_obs).to("cuda" if torch.cuda.is_available() else "cpu")
-        for item in info:
-            if "episode" in item.keys():
-                returns_over_runs.append(item["episode"]["r"])
-                episode_len_over_runs.append(item["episode"]["l"])
-                if run_count==len(returns_over_runs):
-                    finish = True
-                    break
+        if "final_info" in info.keys():
+            for final_info_single in info["final_info"]:
+                if final_info_single!=None:
+                    if "episode" in final_info_single.keys():
+                        returns_over_runs.append(final_info_single["episode"]["r"])
+                        episode_len_over_runs.append(final_info_single["episode"]["l"])
+                        if run_count>=len(returns_over_runs):
+                            finish = True
+                            break
     model.train()
     return returns_over_runs, episode_len_over_runs
 
@@ -391,7 +388,7 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
         None
     """
     frames = []
-    env = gym.make(env_id)
+    env = gym.make(env_id, render_mode="rgb_array")
     for wrapper in env_wrapper:
         env = wrapper(env)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -399,17 +396,16 @@ def record_video(env_id, agent, file, exp_type=None, greedy=False, env_wrapper: 
     if type(agent) == str:
         agent = load_model(run_name=agent, exp_type=exp_type)
 
-    state, done = env.reset(), False
+    state, _ = env.reset()
+    done = False
     while not done:
         with torch.no_grad():
             action = agent.get_action(torch.Tensor(state).unsqueeze(0).to(device), greedy=greedy)
 
-        state, _, terminated, info = env.step(action.squeeze(0).cpu().numpy())
+        state, _, terminated,truncated, info = env.step(action.squeeze(0).cpu().numpy())
+        done = terminated | truncated
 
-        if terminated:
-            done = True
-
-        out = env.render(mode="rgb_array")
+        out = env.render()
         frames.append(out)
 
     env.close()
@@ -451,4 +447,4 @@ def save_and_log_agent(exp_dict, agent, episode_step, greedy=False, print_path=T
         video_file = f"{filepath}/{episode_step}.mp4"
         record_video(exp_dict.env_id, agent, video_file, greedy=greedy, env_wrapper=env_wrapper)
         if wandb.run is not None:
-            wandb.log({"video": wandb.Video(video_file, fps=4, format="gif")})
+            wandb.log({"video": wandb.Video(video_file, format="mp4")})
