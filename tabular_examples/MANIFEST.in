@@ -1,0 +1,5 @@
+recursive-include custom_envs/envs/img *
+recursive-include custom_envs/envs/font *
+prune */.ipynb_checkpoints
+prune */.virtual_documents
+global-exclude __pycache__ *.py[cod] .DS_Store
