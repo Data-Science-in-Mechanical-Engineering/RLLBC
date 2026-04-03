@@ -38,14 +38,34 @@ class RecyclingRobotEnv(Env):
                 "You can specify the render_mode at initialization, "
             )
         self.render_type = render_type
-        if self.render_mode != "text" and self.render_type == "node":
-            self.window_size = (get_monitors()[0].height - 200, get_monitors()[0].height - 500)
-            self.cell_size = (self.window_size[0], self.window_size[1])
-            self.render_time = render_time
-        elif self.render_mode != "text" and self.render_type == "robot":
-            self.window_size = (get_monitors()[0].height - 50, get_monitors()[0].height - 50)
-            self.cell_size = (self.window_size[0], self.window_size[1])
-            self.render_time = render_time
+        self.render_time = render_time
+        # Default sizes work in headless setups.
+        if self.render_type == "node":
+            self.window_size = (700, 400)
+        elif self.render_type == "robot":
+            self.window_size = (700, 700)
+        else:
+            self.window_size = (700, 700)
+        self.cell_size = self.window_size
+
+        # If a monitor is available, keep the larger display-based sizing.
+        if self.render_mode in {"human", "rgb_array"}:
+            try:
+                monitors = get_monitors()
+                if monitors:
+                    monitor_height = monitors[0].height
+                    if self.render_type == "node":
+                        self.window_size = (
+                            max(64, monitor_height - 200),
+                            max(64, monitor_height - 500),
+                        )
+                    elif self.render_type == "robot":
+                        window_edge = max(64, monitor_height - 50)
+                        self.window_size = (window_edge, window_edge)
+                    self.cell_size = self.window_size
+            except Exception:
+                # No display available (e.g., container/CI): keep fallback sizing.
+                pass
         self.window_surface = None
         self.rb_broken = None
         self.rb_high = None
