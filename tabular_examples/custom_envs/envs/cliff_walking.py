@@ -195,18 +195,21 @@ class CliffWalkingEnv(Env):
         if self.clock is None:
             self.clock = pygame.time.Clock()
         if self.elf_images is None:
-            hikers = [
-                path.join(path.dirname(__file__), "img/elf_up.png"),
-                path.join(path.dirname(__file__), "img/elf_right.png"),
-                path.join(path.dirname(__file__), "img/elf_down.png"),
-                path.join(path.dirname(__file__), "img/elf_left.png"),
-            ]
+            img_dir = path.join(path.dirname(__file__), "img")
+            directions = ["up", "right", "down", "left"]
+            hikers = []
+            for direction in directions:
+                cliff_walking_file = path.join(img_dir, f"elf_old_{direction}.png")
+                fallback_file = path.join(img_dir, f"elf_{direction}.png")
+                hikers.append(
+                    cliff_walking_file if path.exists(cliff_walking_file) else fallback_file
+                )
             self.elf_images = [
                 pygame.transform.scale(pygame.image.load(f_name), self.cell_size)
                 for f_name in hikers
             ]
         if self.start_img is None:
-            file_name = path.join(path.dirname(__file__), "img/stool.png")
+            file_name = path.join(path.dirname(__file__), "img/stool_old.png")
             self.start_img = pygame.transform.scale(
                 pygame.image.load(file_name), self.cell_size
             )
