@@ -9,7 +9,14 @@
 </p>
 
 ---
-The algorithms within this library were developed in the context of the class Reinforcement Learning and Learning-based Control (RLLBC) by the Institute for Data Science in Mechanical Engineering (DSME) at RWTH Aachen University. In this class we use this library in Lectures and Exercises. Students can also use the library to expand their knowledge through self-study. We provide example algorithms for tabular and deep reinforcement learning in the folders "tabular_examples" and "deep_examples". All algorithms are presented via Jupyter notebooks. You can find installation instructions below. For more details on how to work with the algorithms, we refer to the descriptions in the notebooks. Furthermore, we provide examples from the lecture and exercise in the folder "class_examples".
+The algorithms within this library were developed in the context of the class Reinforcement Learning and Learning-based Control (RLLBC) by the Institute for Data Science in Mechanical Engineering (DSME) at RWTH Aachen University. In this class we use this library in Lectures and Exercises. Students can also use the library to expand their knowledge through self-study. All algorithms are presented via Jupyter notebooks — see the individual folder READMEs for details:
+
+- [`class_examples/`](class_examples/README.md) — lecture and exercise companion notebooks covering MDPs, DP, MC, TD, function approximation, and learning-based control
+- [`tabular_examples/`](tabular_examples/README.md) — tabular RL implementations: Policy Iteration, Value Iteration, MC Control, SARSA, Q-Learning, Dyna-Q
+- [`deep_examples/`](deep_examples/README.md) — deep RL implementations: DQN, REINFORCE, A2C, TRPO, DDPG, TD3, SAC
+- [`lbc_examples/`](lbc_examples/README.md) — learning-based control notebooks: LQR, Dynamics Learning, MPC, Bayesian Optimisation
+
+You can find installation instructions below.
 
 ## Installation guide
 

@@ -21,32 +21,32 @@ The notebooks follow the progression of the course from foundational MDP theory 
 
 ---
 
-## 1. Foundations: MDPs and Value Functions
+## 1. MDPs and Value Functions
 
 These notebooks introduce the core mathematical framework: Markov Decision Processes, value functions, and the Bellman equations.
 
-### [tic-tac-toe.ipynb](1.%20Foundations%20MDP%20and%20Value%20Functions/tic-tac-toe.ipynb)
+### [tic-tac-toe.ipynb](1.%20MDP%20and%20Value%20Functions/tic-tac-toe.ipynb)
 A self-play tic-tac-toe agent learned via temporal-difference updates on win/loss outcomes. Demonstrates how RL can learn a strategy purely through trial and error without a hand-crafted evaluation function.
 
 - **S&B reference:** Chapter 1.5 (introductory example)
 
 ---
 
-### [markov_process.ipynb](1.%20Foundations%20MDP%20and%20Value%20Functions/markov_process.ipynb)
+### [markov_process.ipynb](1.%20MDP%20and%20Value%20Functions//markov_process.ipynb)
 Defines an MDP by its transition matrix and simulates state trajectories. Illustrates how the Markov property enables compact specification of an environment.
 
 - **S&B reference:** Chapter 3 — Finite MDPs
 
 ---
 
-### [recycling_bot_value_function.ipynb](1.%20Foundations%20MDP%20and%20Value%20Functions/recycling_bot_value_function.ipynb)
+### [recycling_bot_value_function.ipynb](1.%20MDP%20and%20Value%20Functions/)/recycling_bot_value_function.ipynb)
 Computes and visualises state value functions for the Recycling Robot MDP under different fixed policies. Shows how the value of a state depends on the policy and the discount factor γ.
 
 - **S&B reference:** Example 3.3 (Recycling Robot), Section 3.5 (Policies and Value Functions)
 
 ---
 
-### [bellman_opt_eq.ipynb](1.%20Foundations%20MDP%20and%20Value%20Functions/bellman_opt_eq.ipynb)
+### [bellman_opt_eq.ipynb](1.%20MDP%20and%20Value%20Functions//bellman_opt_eq.ipynb)
 Solves the **Bellman optimality equations** directly (using a nonlinear root-finder) for two environments:
 - **Recycling Robot** — derives the optimal value function and reads off the optimal policy.
 - **4×4 Gridworld** — solves for V\* and compares against the policy iteration result from `dp_gridworld.ipynb`.
