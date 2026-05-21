@@ -301,7 +301,7 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
                     if "episode" in final_info_single.keys():
                         returns_over_runs.append(final_info_single["episode"]["r"])
                         episode_len_over_runs.append(final_info_single["episode"]["l"])
-                        if run_count>=len(returns_over_runs):
+                        if len(returns_over_runs)>=run_count:
                             finish = True
                             break
     model.train()
