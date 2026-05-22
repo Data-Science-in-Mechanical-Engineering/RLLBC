@@ -43,7 +43,7 @@ Implements vanilla **REINFORCE** — the foundational Monte Carlo policy gradien
 
 ### [a2c-simple-adv.ipynb](a2c-simple-adv.ipynb)
 
-Introduces **Advantage Actor-Critic (A2C)** with a simple single-step advantage estimate `R − V(s)`. Adds a learned value baseline to the REINFORCE update to reduce variance.
+Introduces **Advantage Actor-Critic (A2C)** with a simple n-step advantage estimate `G − V(s)`. Adds a learned value baseline to the REINFORCE update to reduce variance.
 
 - **S&B reference:** Section 13.5 (Actor-Critic Methods)
 
@@ -51,7 +51,7 @@ Introduces **Advantage Actor-Critic (A2C)** with a simple single-step advantage 
 
 ### [a2c.ipynb](a2c.ipynb)
 
-Full **A2C** implementation using an n-step return advantage estimate and separate actor and critic networks. Extends the simple variant with more stable multi-step bootstrapping.
+Full **A2C** implementation using a generalized advantage estimate (GAE) and separate actor and critic networks. Extends the simple variant with more stable multi-step bootstrapping.
 
 - **S&B reference:** Section 13.5 (Actor-Critic Methods)
 
