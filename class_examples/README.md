@@ -51,7 +51,7 @@ Solves the **Bellman optimality equations** directly (using a nonlinear root-fin
 - **Recycling Robot** — derives the optimal value function and reads off the optimal policy.
 - **4×4 Gridworld** — solves for V\* and compares against the policy iteration result from `dp_gridworld.ipynb`.
 
-- **S&B reference:** Example 3.3 (Recycling Robot), Example 3.8 / Section 3.6 (Bellman Optimality), Example 4.1 (Gridworld)
+- **S&B reference:** Example 3.3 (Recycling Robot), Example 3.8/3.9 / Section 3.6 (Bellman Optimality), Example 4.1 (Gridworld)
 
 ---
 
@@ -111,7 +111,7 @@ Runs **SARSA** (on-policy) and **Q-Learning** (off-policy) on the Cliff Walking 
 ### [td_vs_mc_control.ipynb](4.%20Temporal%20Difference%20Learning/td_vs_mc_control.ipynb)
 Compares **SARSA** (TD control) and **First-Visit MC Control** on FrozenLake. Visualises learning curves and final policies side by side to highlight the practical convergence speed difference.
 
-- **S&B reference:** Chapter 5 (MC Control), Chapter 6 (TD Control)
+- **S&B reference:** Chapter 5.3 (MC Control), Chapter 6.4 (SARSA/TD Control)
 
 ---
 
@@ -147,7 +147,7 @@ Solves the continuous **Mountain Car** problem with **Semi-gradient SARSA** usin
 ### [nonlinear_approximation.ipynb](6.%20Function%20Approximation/nonlinear_approximation.ipynb)
 Uses a **feedforward neural network** as a nonlinear function approximator to balance the CartPole. The network is updated via semi-gradient TD, bridging the gap between classical function approximation and deep RL.
 
-- **S&B reference:** Section 9.7 (Nonlinear Function Approximation — ANNs), Section 16.5 (Pole Balancing)
+- **S&B reference:** Section 9.7 (Nonlinear Function Approximation — ANNs)
 
 ---
 
