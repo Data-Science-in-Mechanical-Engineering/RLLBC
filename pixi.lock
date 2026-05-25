@@ -5,6 +5,8 @@ environments:
     - url: https://conda.anaconda.org/conda-forge/
     indexes:
     - https://pypi.org/simple
+    options:
+      pypi-prerelease-mode: if-necessary-or-explicit
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -1997,10 +1999,9 @@ packages:
 - pypi: ./tabular_examples
   name: custom-envs
   version: 0.0.1
-  sha256: f793c79019af34f7d2c28a5dbced1ee8df3875a6edc5f5aac5fd0bb6105adba5
+  sha256: 129794171a594b1ebd09c0e6f6486dbc2f07cf238756794b252fc1cf7a0dc1cd
   requires_dist:
   - gymnasium
-  editable: true
 - pypi: https://files.pythonhosted.org/packages/e7/05/c19819d5e3d95294a6f5947fb9b9629efb316b96de511b418c53d245aae6/cycler-0.12.1-py3-none-any.whl
   name: cycler
   version: 0.12.1

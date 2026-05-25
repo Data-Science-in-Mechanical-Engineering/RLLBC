@@ -21,10 +21,6 @@ register(
     entry_point='custom_envs.envs.cart_pole:CartPoleEnv',
 )
 register(
-    id='CustomCartPole-v2',
-    entry_point='custom_envs.envs.cart_pole_v2:CartPoleEnv_v2',
-)
-register(
     id='CustomPendulum-v1',
     entry_point='custom_envs.envs.pendulum:CustomPendulumEnv',
     max_episode_steps=200,

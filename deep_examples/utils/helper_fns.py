@@ -1,7 +1,7 @@
 import os
 import warnings
 import collections
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -15,7 +15,7 @@ import gymnasium as gym
 import wandb
 import torch
 from stable_baselines3.common.atari_wrappers import MaxAndSkipEnv, EpisodicLifeEnv, FireResetEnv, \
-    ClipRewardEnv
+    ClipRewardEnv, NoopResetEnv
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", category=DeprecationWarning)
@@ -35,36 +35,6 @@ Here is a list of important helper functions (in no particular order). You may c
 7. 'make_atari_env' - helps in creating a vectorized gymnasium environment for the Breakeout Atari game
 '''
 
-
-class NoopResetEnv(gym.Wrapper):
-    """
-    Sample initial states by taking random number of no-ops on reset.
-    No-op is assumed to be action 0.
-
-    :param env: the environment to wrap
-    :param noop_max: the maximum value of no-ops to run
-    """
-
-    def __init__(self, env: gym.Env, noop_max: int = 30):
-        gym.Wrapper.__init__(self, env)
-        self.noop_max = noop_max
-        self.override_num_noops = None
-        self.noop_action = 0
-        assert env.unwrapped.get_action_meanings()[0] == "NOOP"
-
-    def reset(self, **kwargs) -> np.ndarray:
-        self.env.reset(**kwargs)
-        if self.override_num_noops is not None:
-            noops = self.override_num_noops
-        else:
-            noops = self.unwrapped.np_random.integers(1, self.noop_max + 1)
-        assert noops > 0
-        obs = np.zeros(0)
-        for _ in range(noops):
-            obs, _, terminated,truncated, _ = self.env.step(self.noop_action)
-            if terminated | truncated:
-                obs, _ = self.env.reset(**kwargs)
-        return obs, {}
 
 def make_single_env(env_id, seed):
     """
@@ -104,17 +74,104 @@ def make_env(env_id, seed):
     return thunk
 
 
-def make_atari_breakout_env(env_id, seed):
-    def thunk():
+from functools import partial
+from typing import Callable, List
 
+def maybe_fire_reset(env):
+    """
+    Apply FireResetEnv only if the Atari environment has a FIRE action.
+    """
+    if "FIRE" in env.unwrapped.get_action_meanings():
+        env = FireResetEnv(env)
+    return env
+
+
+def make_atari_breakout_wrappers(
+        episodic_life: bool = True,
+) -> List[Callable]:
+    """
+    Return the Atari preprocessing wrapper stack.
+
+    This wrapper list follows the CleanRL Atari DQN style:
+
+        RecordEpisodeStatistics
+        NoopResetEnv
+        MaxAndSkipEnv(skip=4)
+        optionally EpisodicLifeEnv
+        FireResetEnv if the env supports FIRE
+        ClipRewardEnv
+        ResizeObservation(84, 84)
+        GrayScaleObservation
+        FrameStack(4)
+
+    Use episodic_life=True for training and CleanRL-style evaluation. This makes
+    life loss act as a terminal transition for learning, while full-game returns
+    are still logged by RecordEpisodeStatistics.
+
+    Use episodic_life=False for manual video recording with the existing
+    record_video() helper. Since record_video() stops at terminated or truncated,
+    disabling EpisodicLifeEnv makes the video run until the real Atari game ends
+    instead of stopping after one lost life.
+    """
+    wrappers = [
+        gym.wrappers.RecordEpisodeStatistics,
+        partial(NoopResetEnv, noop_max=30),
+        partial(MaxAndSkipEnv, skip=4),
+    ]
+
+    if episodic_life:
+        wrappers.append(EpisodicLifeEnv)
+
+    wrappers.extend(
+        [
+            maybe_fire_reset,
+            ClipRewardEnv,
+            partial(gym.wrappers.ResizeObservation, shape=(84, 84)),
+            gym.wrappers.GrayScaleObservation,
+            partial(gym.wrappers.FrameStack, num_stack=4),
+        ]
+    )
+
+    return wrappers
+
+def make_atari_breakout_env(
+        env_id: str,
+        seed: int,
+        episodic_life: bool = True,
+):
+    """
+    Create a CleanRL-style Atari Breakout environment thunk.
+
+    The default setting episodic_life=True matches the standard CleanRL Atari DQN
+    preprocessing setup. Life loss is treated as a terminal transition for
+    learning through EpisodicLifeEnv, but RecordEpisodeStatistics is applied
+    before EpisodicLifeEnv, so logged episodic returns still correspond to full
+    real Atari games.
+
+    Set episodic_life=False only for manual full-game video recording with the
+    existing record_video() helper, because that helper stops immediately when
+    terminated or truncated is returned.
+
+    Args:
+        env_id: Gymnasium Atari environment id, e.g. "BreakoutNoFrameskip-v4".
+        seed: Seed for the action and observation spaces.
+        episodic_life: Whether to use EpisodicLifeEnv.
+
+    Returns:
+        A thunk that creates the wrapped Atari environment.
+    """
+
+    def thunk():
         env = gym.make(env_id)
-        env = gym.wrappers.AtariPreprocessing(env, frame_skip=4, grayscale_obs=True, scale_obs=False, terminal_on_life_loss=False)
-        env = gym.wrappers.FrameStack(env, 4)
-        env = ClipRewardEnv(env)
-        env = gym.wrappers.RecordEpisodeStatistics(env)
+
+        for wrapper in make_atari_breakout_wrappers(
+                episodic_life=episodic_life,
+        ):
+            env = wrapper(env)
+
+        env.reset(seed=seed)
         env.action_space.seed(seed)
         env.observation_space.seed(seed)
-        np.random.seed(seed)
 
         return env
 
@@ -301,7 +358,7 @@ def evaluate_agent(envs, model, run_count, seed, greedy_actor=False):
                     if "episode" in final_info_single.keys():
                         returns_over_runs.append(final_info_single["episode"]["r"])
                         episode_len_over_runs.append(final_info_single["episode"]["l"])
-                        if run_count>=len(returns_over_runs):
+                        if len(returns_over_runs)>=run_count:
                             finish = True
                             break
     model.train()
