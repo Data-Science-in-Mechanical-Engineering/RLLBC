@@ -41,8 +41,11 @@ class CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
             ],
             dtype=np.float32,
         )
-
-        self.action_space = spaces.Box(-100, 100)
+        self.action_space = spaces.Box(
+            low=np.array([-self.force_mag], dtype=np.float32),
+            high=np.array([self.force_mag], dtype=np.float32),
+            dtype=np.float32,
+        )
         self.observation_space = spaces.Box(-high, high, dtype=np.float32)
 
         self.render_mode = render_mode
