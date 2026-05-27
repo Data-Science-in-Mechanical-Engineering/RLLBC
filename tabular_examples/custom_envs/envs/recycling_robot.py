@@ -11,6 +11,10 @@ import gymnasium as gym
 
 
 class RecyclingRobotEnv(Env):
+    """
+    Recycling Robot Environment as in Sutton and Barto's book "Reinforcement Learning: An Introduction" (Example 3.3). 
+    Note that we added a duration parameter which triggers termination after finite time for MC methods. 
+    """
     metadata = {
         "render_modes": ["human", "rgb_array", "text", "None"],
         "render_type": ["robot", "node", "None"],

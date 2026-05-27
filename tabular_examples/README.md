@@ -39,31 +39,31 @@ Collapses evaluation and improvement into a single **Bellman optimality sweep** 
 
 ## 2. Monte Carlo Methods
 
-MC methods learn from **complete episodes** without requiring a model. Both notebooks implement MC Control with ε-greedy exploration on `CustomFrozenLake-v1` and visualise the learned Q-function as a triangle-grid heatmap.
+MC methods learn from **complete episodes** without requiring a model. Both notebooks implement MC Control with ε-greedy exploration on `CustomFrozenLake-v1` and visualise the learned Q-function.
 
 ### [first_visit_mc.ipynb](tabular_rl/MC/first_visit_mc.ipynb)
 
-Updates Q(s, a) using the return from the **first visit** to each (state, action) pair per episode; subsequent visits within the same episode are skipped.
+Updates Q(s, a) using the return from the **first visit** to each (state, action) pair per episode.
 
-- **S&B reference:** Section 5.4 (MC Control with Exploring Starts)
+- **S&B reference:** Section 5.4 (MC Control)
 
 ---
 
 ### [every_visit_mc.ipynb](tabular_rl/MC/every_visit_mc.ipynb)
 
-Updates Q(s, a) using the return from **every visit** to each (state, action) pair per episode. All other aspects are identical to the first-visit variant.
+Updates Q(s, a) using the return from **every visit** to each (state, action) pair per episode.
 
-- **S&B reference:** Section 5.1 (MC Prediction)
+- **S&B reference:** Section 5.1, Section 5.4
 
 ---
 
 ## 3. Temporal Difference Learning
 
-TD methods combine the sampling of MC with the bootstrapping of DP, learning online from incomplete episodes without a model.
+TD methods combine the sampling of MC with the bootstrapping of DP, learning from incomplete episodes without a model.
 
 ### [sarsa.ipynb](tabular_rl/TD/sarsa.ipynb)
 
-**On-policy** TD control on `CliffWalking-v1`. The same ε-greedy policy drives both action selection and the TD target `R + γ Q(S', A')`, so SARSA converges to the optimal policy among ε-greedy policies and finds safer paths around the cliff.
+**On-policy** TD control on `CliffWalking-v1`. The same ε-greedy policy drives both action selection and the TD target `R + γ Q(S', A')`.
 
 - **S&B reference:** Section 6.4 (SARSA), Example 6.6 (Cliff Walking)
 
@@ -79,7 +79,7 @@ TD methods combine the sampling of MC with the bootstrapping of DP, learning onl
 
 ### [dyna-q.ipynb](tabular_rl/TD/dyna-q.ipynb)
 
-Augments Q-Learning with a **learned environment model** on `CustomFrozenLake-v1`. After each real step, additional planning updates are sampled from the model, dramatically reducing the number of real environment interactions needed to converge.
+Augments Q-Learning with a **learned tabular environment model** on `CustomFrozenLake-v1`. After each real step, additional planning updates are sampled from the model, potentially reducing the number of real environment interactions needed to converge.
 
 - **S&B reference:** Section 8.2 (Dyna-Q)
 

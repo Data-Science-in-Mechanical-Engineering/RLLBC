@@ -1,8 +1,6 @@
 # Class Examples
 
-This folder contains all lecture and exercise companion notebooks for the course **Reinforcement Learning and Learning-based Control (RLLBC)** at RWTH Aachen University (DSME).
-
-The notebooks follow the progression of the course from foundational MDP theory through tabular RL to function approximation and learning-based control. Each section references the corresponding chapters and examples in the primary RL textbook:
+This folder contains lecture and exercise companion notebooks. The notebooks progress from foundational MDP theory through tabular RL to function approximation and learning-based control. Each section references the corresponding chapters and examples in the primary RL textbook:
 
 > **Sutton & Barto** — *Reinforcement Learning: An Introduction*, 2nd ed. (2018)  
 > Available free at [incompleteideas.net/book/the-book.html](http://incompleteideas.net/book/the-book.html)
@@ -11,7 +9,7 @@ The notebooks follow the progression of the course from foundational MDP theory 
 
 ## Table of Contents
 
-1. [Foundations: MDPs and Value Functions](#1-foundations-mdps-and-value-functions)
+1. [MDPs and Value Functions](#1-foundations-mdps-and-value-functions)
 2. [Dynamic Programming](#2-dynamic-programming)
 3. [Monte Carlo Methods](#3-monte-carlo-methods)
 4. [Temporal-Difference Learning](#4-temporal-difference-learning)
@@ -95,7 +93,7 @@ Trains a Blackjack agent with **Monte Carlo Control with Exploring Starts**. The
 TD methods combine the sampling of MC with the bootstrapping of DP to learn online from incomplete episodes.
 
 ### [td0_vs_constant_alpha_mc.ipynb](4.%20Temporal%20Difference%20Learning/td0_vs_constant_alpha_mc.ipynb)
-Side-by-side comparison of **TD(0)** and **constant-α MC** for policy *evaluation* (prediction) on the FrozenLake environment. Tracks the deviation from the true value function over training episodes to illustrate the bias-variance trade-off between the two methods.
+Side-by-side comparison of **TD(0)** and **constant-α MC** for policy *evaluation* (prediction) on the FrozenLake environment. Illustrates the bias-variance trade-off between the two methods.
 
 - **S&B reference:** Section 6.1 (TD Prediction), Example 6.2 (Random Walk comparison)
 

@@ -1,6 +1,6 @@
 # Learning-Based Control — Example Notebooks
 
-This folder contains notebook implementations of learning-based control methods covered in the RLLBC course. All notebooks use the CartPole as a common benchmark system and progress from classical optimal control through data-driven dynamics learning to model-based and data-efficient control.
+This folder contains notebook implementations of learning-based control methods. All notebooks use the CartPole as a common benchmark system and progress from classical optimal control through data-driven dynamics learning to model-based and data-efficient control.
 
 Students are encouraged to modify cost weights, prediction horizons, and noise levels to deepen their understanding.
 
