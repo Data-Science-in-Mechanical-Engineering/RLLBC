@@ -24,6 +24,19 @@ with warnings.catch_warnings():
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
+def env_flag(name, default=False):
+    """
+    Parse a boolean environment variable.
+
+    Values 1, true, yes, and on enable the flag. Values 0, false, no, and off
+    disable it. If the variable is not set, default is returned.
+    """
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in ("1", "true", "yes", "on")
+
+
 '''
 Here is a list of important helper functions (in no particular order). You may come back to this later as you start getting more into the different sections of the notebook. For now, here a quick preview:
 1. `make_single_env`, `make_env` - helps in creating a single gymnasium environment
@@ -177,7 +190,7 @@ def make_atari_breakout_env(
 
     return thunk
 
-def wandb_logging(wandb_prj_name, run_name, config=None, save_code=False):
+def wandb_logging(wandb_prj_name, run_name, config=None, save_code=False, group=None):
     """
     Sets up and initializes a Weights & Biases (wandb) logging session for the given notebook and run.
     Args:
@@ -185,6 +198,7 @@ def wandb_logging(wandb_prj_name, run_name, config=None, save_code=False):
         run_name: string specifying the name of the wandb run to create
         config: optional dictionary of experiment configuration values to log to wandb
         save_code: boolean indicating whether to save the code associated with the run to wandb
+        group: optional string specifying the wandb group name for organizing related runs
     Returns:
         None
     """
@@ -197,6 +211,7 @@ def wandb_logging(wandb_prj_name, run_name, config=None, save_code=False):
         name=run_name,
         config=config,
         save_code=save_code,
+        group=group,
         )
 
 
@@ -213,7 +228,8 @@ def setup_logging(wandb_prj_name, exp_dict, hypp_dict):
     if wandb.run is not None:
         wandb.finish()
     if exp_dict.enable_wandb_logging:
-        wandb_logging(wandb_prj_name, exp_dict.run_name, dict(exp_dict, **hypp_dict))
+        group = exp_dict.get("wandb_group", None)
+        wandb_logging(wandb_prj_name, exp_dict.run_name, dict(exp_dict, **hypp_dict), group=group)
     else:
         wandb.init(mode="disabled")
     exp_folder = "" if exp_dict.exp_type is None else exp_dict.exp_type
